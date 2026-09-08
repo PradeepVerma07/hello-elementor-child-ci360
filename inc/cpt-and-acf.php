@@ -818,6 +818,71 @@ function ci360_acf_register_all_local_fields() {
         'wrapper' => array( 'width' => '33' ),
     );
 
+    
+    // Tab 7: Real Blog & Insights Page Settings
+    $hero_fields[] = array(
+        'key' => 'field_tab_blog_settings',
+        'label' => 'Blog & Insights Page (Category Include/Exclude)',
+        'type' => 'tab',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_blog_badge_text',
+        'label' => 'Blog Badge Text',
+        'name' => 'blog_badge_text',
+        'type' => 'text',
+        'default_value' => 'Insights & Perspectives',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_blog_title_text',
+        'label' => 'Blog Page Title',
+        'name' => 'blog_title_text',
+        'type' => 'text',
+        'default_value' => 'The CI360 Journal',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_blog_description',
+        'label' => 'Blog Subtitle / Description',
+        'name' => 'blog_description',
+        'type' => 'textarea',
+        'rows' => 2,
+        'default_value' => 'Original thoughts, strategic frameworks, and deep dives on digital transformation, performance design, and modern brand leadership.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_blog_include_categories',
+        'label' => 'Include Specific Categories (Slugs or IDs)',
+        'name' => 'blog_include_categories',
+        'type' => 'text',
+        'instructions' => 'Comma-separated category slugs or IDs to ONLY display (e.g. strategy, technology, design). Leave blank to show all.',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_blog_exclude_categories',
+        'label' => 'Exclude Specific Categories (Slugs or IDs)',
+        'name' => 'blog_exclude_categories',
+        'type' => 'text',
+        'instructions' => 'Comma-separated category slugs or IDs to HIDE (e.g. uncategorized, archive).',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_blog_posts_per_page',
+        'label' => 'Articles Per Page',
+        'name' => 'blog_posts_per_page',
+        'type' => 'number',
+        'default_value' => 9,
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_blog_show_featured',
+        'label' => 'Display Large Top Featured Article',
+        'name' => 'blog_show_featured',
+        'type' => 'true_false',
+        'ui' => 1,
+        'default_value' => 1,
+        'wrapper' => array( 'width' => '50' ),
+    );
+
     acf_add_local_field_group( array(
         'key' => 'group_ci360_hero_settings',
         'title' => 'CI360: Theme & Homepage Section Settings',
@@ -842,6 +907,13 @@ function ci360_acf_register_all_local_fields() {
                     'param' => 'page_template',
                     'operator' => '==',
                     'value' => 'template-home-acf.php',
+                ),
+            ),
+            array(
+                array(
+                    'param' => 'page_template',
+                    'operator' => '==',
+                    'value' => 'template-blog.php',
                 ),
             ),
         ),
@@ -1026,4 +1098,97 @@ function ci360_save_native_case_study_metabox( $post_id ) {
 
     $is_featured = isset( $_POST['is_featured_project'] ) ? '1' : '0';
     update_post_meta( $post_id, 'is_featured_project', $is_featured );
+}
+
+// =========================================================================
+// 5. NATIVE WORDPRESS METABOX FOR BLOG PAGE (Include/Exclude Categories)
+// =========================================================================
+add_action( 'add_meta_boxes', 'ci360_register_blog_page_metabox' );
+add_action( 'save_post_page', 'ci360_save_blog_page_metabox' );
+
+function ci360_register_blog_page_metabox() {
+    global $post;
+    if ( $post ) {
+        $template = get_post_meta( $post->ID, '_wp_page_template', true );
+        if ( $template === 'template-blog.php' || strpos( $post->post_name, 'blog' ) !== false || strpos( $post->post_name, 'insight' ) !== false ) {
+            add_meta_box(
+                'ci360_blog_settings_metabox',
+                __( 'CI360 Blog Query & Category Filter Controls', 'hello-elementor-child-ci360-acf' ),
+                'ci360_render_blog_page_metabox',
+                'page',
+                'normal',
+                'high'
+            );
+        }
+    }
+}
+
+function ci360_render_blog_page_metabox( $post ) {
+    wp_nonce_field( 'ci360_blog_nonce_action', 'ci360_blog_nonce' );
+
+    $inc_cats    = get_post_meta( $post->ID, 'blog_include_categories', true );
+    $exc_cats    = get_post_meta( $post->ID, 'blog_exclude_categories', true );
+    $posts_pp    = get_post_meta( $post->ID, 'blog_posts_per_page', true ) ?: 9;
+    $show_feat   = get_post_meta( $post->ID, 'blog_show_featured', true ) ?: '1';
+    $b_badge     = get_post_meta( $post->ID, 'blog_badge_text', true ) ?: 'Insights & Perspectives';
+    $b_title     = get_post_meta( $post->ID, 'blog_title_text', true ) ?: 'The CI360 Journal';
+    $b_desc      = get_post_meta( $post->ID, 'blog_description', true ) ?: 'Original thoughts, strategic frameworks, and deep dives on digital transformation.';
+    ?>
+    <div class="ci360-metabox-wrap" style="padding:10px 0;">
+        <p style="margin-bottom:15px; color:#64748b;">Configure which real WordPress blog posts appear on this page by including or excluding specific categories.</p>
+        <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:15px;">
+            <div style="flex:1; min-width:260px;">
+                <label style="display:block; font-weight:600; margin-bottom:5px;">Include Specific Categories (Slugs or IDs):</label>
+                <input type="text" name="blog_include_categories" value="<?php echo esc_attr( $inc_cats ); ?>" placeholder="e.g. strategy, technology, design" style="width:100%;">
+                <span style="font-size:11px; color:#64748b;">Comma-separated category slugs. Leave blank to include all.</span>
+            </div>
+            <div style="flex:1; min-width:260px;">
+                <label style="display:block; font-weight:600; margin-bottom:5px;">Exclude Specific Categories (Slugs or IDs):</label>
+                <input type="text" name="blog_exclude_categories" value="<?php echo esc_attr( $exc_cats ); ?>" placeholder="e.g. uncategorized, archive" style="width:100%;">
+                <span style="font-size:11px; color:#64748b;">Comma-separated category slugs to hide from this page.</span>
+            </div>
+        </div>
+        <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:15px;">
+            <div style="flex:1; min-width:180px;">
+                <label style="display:block; font-weight:600; margin-bottom:5px;">Posts Per Page:</label>
+                <input type="number" name="blog_posts_per_page" value="<?php echo esc_attr( $posts_pp ); ?>" style="width:100%;">
+            </div>
+            <div style="flex:1; min-width:180px;">
+                <label style="display:block; font-weight:600; margin-bottom:5px;">Top Featured Post:</label>
+                <label style="font-weight:normal;"><input type="checkbox" name="blog_show_featured" value="1" <?php checked( $show_feat, '1' ); ?>> Show large top featured post on page 1</label>
+            </div>
+        </div>
+        <div style="margin-bottom:15px;">
+            <label style="display:block; font-weight:600; margin-bottom:5px;">Header Badge &amp; Title:</label>
+            <input type="text" name="blog_badge_text" value="<?php echo esc_attr( $b_badge ); ?>" style="width:48%; margin-right:2%;">
+            <input type="text" name="blog_title_text" value="<?php echo esc_attr( $b_title ); ?>" style="width:48%;">
+        </div>
+        <div>
+            <label style="display:block; font-weight:600; margin-bottom:5px;">Header Subtitle:</label>
+            <textarea name="blog_description" rows="2" style="width:100%;"><?php echo esc_textarea( $b_desc ); ?></textarea>
+        </div>
+    </div>
+    <?php
+}
+
+function ci360_save_blog_page_metabox( $post_id ) {
+    if ( ! isset( $_POST['ci360_blog_nonce'] ) || ! wp_verify_nonce( $_POST['ci360_blog_nonce'], 'ci360_blog_nonce_action' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( ! current_user_can( 'edit_page', $post_id ) ) {
+        return;
+    }
+
+    $fields = array( 'blog_include_categories', 'blog_exclude_categories', 'blog_posts_per_page', 'blog_badge_text', 'blog_title_text', 'blog_description' );
+    foreach ( $fields as $field ) {
+        if ( isset( $_POST[$field] ) ) {
+            update_post_meta( $post_id, $field, sanitize_text_field( $_POST[$field] ) );
+        }
+    }
+
+    $show_feat = isset( $_POST['blog_show_featured'] ) ? '1' : '0';
+    update_post_meta( $post_id, 'blog_show_featured', $show_feat );
 }

@@ -71,3 +71,9 @@ You can place the sections anywhere on your pages using Elementor's **Shortcode*
   ```
   *Presents your Vision, Mission, and Core Values with interactive cards, custom badges, and live bullet points.*
 
+- **Dynamic Real Blog Grid (Include/Exclude Categories & Real Posts)**:
+  ```text
+  [ci360_blog_grid]
+  ```
+  *Pulls real published WordPress posts with category filtering, reading time estimates, pagination, and meta box include/exclude category controls.*
+

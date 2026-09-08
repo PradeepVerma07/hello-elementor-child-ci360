@@ -46,3 +46,12 @@ function ci360_acf_render_foundational_pillars_shortcode( $atts ) {
     get_template_part( 'template-parts/foundational-pillars-acf' );
     return ob_get_clean();
 }
+
+// 6. Register [ci360_blog_grid] Shortcode for Elementor
+add_shortcode( 'ci360_blog_grid', 'ci360_acf_render_blog_grid_shortcode' );
+
+function ci360_acf_render_blog_grid_shortcode( $atts ) {
+    ob_start();
+    get_template_part( 'template-parts/blog-grid-acf' );
+    return ob_get_clean();
+}
