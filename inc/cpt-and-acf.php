@@ -1,6 +1,7 @@
 <?php
 /**
  * Custom Post Types (CPT), Taxonomies & ACF Fields Setup
+ * Compatible with BOTH ACF Free and ACF Pro.
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -74,7 +75,7 @@ function ci360_register_custom_post_types_and_taxonomies() {
 }
 
 // =========================================================================
-// 2. REGISTER ACF OPTIONS PAGE ("CI360 Hero Settings")
+// 2. REGISTER ACF OPTIONS PAGE ("Hero Settings")
 // =========================================================================
 add_action( 'acf/init', 'ci360_register_acf_options_page' );
 
@@ -93,7 +94,7 @@ function ci360_register_acf_options_page() {
 }
 
 // =========================================================================
-// 3. REGISTER ACF FIELD GROUPS
+// 3. REGISTER ACF FIELD GROUPS (ACF Free & Pro Compatible)
 // =========================================================================
 add_action( 'acf/init', 'ci360_acf_register_all_local_fields' );
 
@@ -102,9 +103,6 @@ function ci360_acf_register_all_local_fields() {
         return;
     }
 
-    // ---------------------------------------------------------------------
-    // Field Group 1: Hero Section Settings (Options Page + Front Page)
-    // ---------------------------------------------------------------------
     acf_add_local_field_group( array(
         'key' => 'group_ci360_hero_settings',
         'title' => 'CI360: Dynamic Home Hero Section Settings',
@@ -188,100 +186,149 @@ function ci360_acf_register_all_local_fields() {
                 'default_value' => '/projects/',
             ),
 
-            // Tab 3: Stats / Metrics
+            // Tab 3: Stats / Metrics (4 Metric Fields - Free & Pro compatible)
             array(
                 'key' => 'field_tab_hero_stats',
                 'label' => 'Live Metrics Grid',
                 'type' => 'tab',
             ),
             array(
-                'key' => 'field_hero_stats_repeater',
-                'label' => 'Hero Stats (4 Items Recommended)',
-                'name' => 'hero_stats_repeater',
-                'type' => 'repeater',
-                'layout' => 'table',
-                'button_label' => 'Add Stat Card',
-                'sub_fields' => array(
-                    array(
-                        'key' => 'field_stat_value',
-                        'label' => 'Metric Number / Value (e.g. ₹450Cr+)',
-                        'name' => 'stat_value',
-                        'type' => 'text',
-                        'required' => 1,
-                    ),
-                    array(
-                        'key' => 'field_stat_label',
-                        'label' => 'Metric Label (e.g. Client Revenue)',
-                        'name' => 'stat_label',
-                        'type' => 'text',
-                        'required' => 1,
-                    ),
-                    array(
-                        'key' => 'field_stat_color',
-                        'label' => 'Accent Color',
-                        'name' => 'stat_color',
-                        'type' => 'select',
-                        'choices' => array(
-                            'text-emerald-400' => 'Emerald Green',
-                            'text-cyan-400'    => 'Cyan Blue',
-                            'text-blue-400'    => 'Electric Blue',
-                            'text-indigo-400'  => 'Indigo Violet',
-                        ),
-                        'default_value' => 'text-cyan-400',
-                    ),
-                ),
+                'key' => 'field_stat1_val',
+                'label' => 'Metric 1 Value',
+                'name' => 'hero_stat1_value',
+                'type' => 'text',
+                'default_value' => '₹450Cr+',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_stat1_lbl',
+                'label' => 'Metric 1 Label',
+                'name' => 'hero_stat1_label',
+                'type' => 'text',
+                'default_value' => 'Client Revenue',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_stat2_val',
+                'label' => 'Metric 2 Value',
+                'name' => 'hero_stat2_value',
+                'type' => 'text',
+                'default_value' => '98.4%',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_stat2_lbl',
+                'label' => 'Metric 2 Label',
+                'name' => 'hero_stat2_label',
+                'type' => 'text',
+                'default_value' => 'Client Retention',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_stat3_val',
+                'label' => 'Metric 3 Value',
+                'name' => 'hero_stat3_value',
+                'type' => 'text',
+                'default_value' => '3 Studios',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_stat3_lbl',
+                'label' => 'Metric 3 Label',
+                'name' => 'hero_stat3_label',
+                'type' => 'text',
+                'default_value' => 'Ahmedabad • Delhi • USA',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_stat4_val',
+                'label' => 'Metric 4 Value',
+                'name' => 'hero_stat4_value',
+                'type' => 'text',
+                'default_value' => '< 1.2s',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_stat4_lbl',
+                'label' => 'Metric 4 Label',
+                'name' => 'hero_stat4_label',
+                'type' => 'text',
+                'default_value' => 'Page Speed',
+                'wrapper' => array( 'width' => '50' ),
             ),
 
-            // Tab 4: Showcase Slides & Video
+            // Tab 4: Showcase Slider & Video Link
             array(
                 'key' => 'field_tab_hero_slides',
-                'label' => 'Right Showcase Slider',
+                'label' => 'Right Showcase Slider & Video',
                 'type' => 'tab',
             ),
             array(
-                'key' => 'field_hero_slides_repeater',
-                'label' => 'Showcase Cards (Images or Videos)',
-                'name' => 'hero_slides_repeater',
-                'type' => 'repeater',
-                'layout' => 'block',
-                'button_label' => 'Add Showcase Slide',
-                'sub_fields' => array(
-                    array(
-                        'key' => 'field_slide_title',
-                        'label' => 'Slide Title',
-                        'name' => 'slide_title',
-                        'type' => 'text',
-                        'required' => 1,
-                    ),
-                    array(
-                        'key' => 'field_slide_tag',
-                        'label' => 'Pill Tag (e.g. Visual Moats, Project)',
-                        'name' => 'slide_tag',
-                        'type' => 'text',
-                        'default_value' => 'Showcase',
-                    ),
-                    array(
-                        'key' => 'field_slide_description',
-                        'label' => 'Short Summary',
-                        'name' => 'slide_description',
-                        'type' => 'textarea',
-                        'rows' => 2,
-                    ),
-                    array(
-                        'key' => 'field_slide_image',
-                        'label' => 'Slide Cover Image',
-                        'name' => 'slide_image',
-                        'type' => 'image',
-                        'return_format' => 'url',
-                    ),
-                    array(
-                        'key' => 'field_slide_video_url',
-                        'label' => 'Direct MP4 Video URL (Optional)',
-                        'name' => 'slide_video_url',
-                        'type' => 'url',
-                        'instructions' => 'If provided, the slide plays direct MP4 video instead of the static image.',
-                    ),
-                ),
+                'key' => 'field_hero_video_link',
+                'label' => '▶ Showcase Video Link (Direct MP4 URL)',
+                'name' => 'hero_video_url',
+                'type' => 'url',
+                'instructions' => 'Paste your direct MP4 video link here to enable video playback on the 3D CGI / Project slide.',
+                'default_value' => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/uploads/2026/09/WhatsApp-Video-2026-09-08-at-15.18.30.mp4',
+            ),
+            array(
+                'key' => 'field_hero_video_title',
+                'label' => 'Video Slide Title',
+                'name' => 'hero_video_title',
+                'type' => 'text',
+                'default_value' => '3D CGI & Motion Graphics',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_hero_video_tag',
+                'label' => 'Video Slide Tag / Badge',
+                'name' => 'hero_video_tag',
+                'type' => 'text',
+                'default_value' => 'Project',
+                'wrapper' => array( 'width' => '50' ),
+            ),
+            array(
+                'key' => 'field_hero_video_desc',
+                'label' => 'Video Slide Description',
+                'name' => 'hero_video_desc',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'Photorealistic 3D product visualizations, virtual environments, and motion narratives.',
+            ),
+            array(
+                'key' => 'field_hero_slide1_image',
+                'label' => 'Slide 1 Image (Brand Architecture)',
+                'name' => 'hero_slide1_image',
+                'type' => 'image',
+                'return_format' => 'url',
+            ),
+            array(
+                'key' => 'field_hero_slide2_image',
+                'label' => 'Slide 2 Image (Strategic Storytelling)',
+                'name' => 'hero_slide2_image',
+                'type' => 'image',
+                'return_format' => 'url',
+            ),
+            array(
+                'key' => 'field_hero_slide3_image',
+                'label' => 'Slide 3 Image (Commercial Film & Media)',
+                'name' => 'hero_slide3_image',
+                'type' => 'image',
+                'return_format' => 'url',
+            ),
+            array(
+                'key' => 'field_hero_slide5_image',
+                'label' => 'Slide 5 Image (Websites & Experiences)',
+                'name' => 'hero_slide5_image',
+                'type' => 'image',
+                'return_format' => 'url',
+            ),
+            array(
+                'key' => 'field_hero_slide6_image',
+                'label' => 'Slide 6 Image (4K Podcast Studio)',
+                'name' => 'hero_slide6_image',
+                'type' => 'image',
+                'return_format' => 'url',
             ),
         ),
         'location' => array(
@@ -304,60 +351,6 @@ function ci360_acf_register_all_local_fields() {
                     'param' => 'page_template',
                     'operator' => '==',
                     'value' => 'template-home-acf.php',
-                ),
-            ),
-        ),
-    ) );
-
-    // ---------------------------------------------------------------------
-    // Field Group 2: Case Study Single Project Details (CPT: case_study)
-    // ---------------------------------------------------------------------
-    acf_add_local_field_group( array(
-        'key' => 'group_ci360_case_study_details',
-        'title' => 'Case Study Project Metadata & Metrics',
-        'fields' => array(
-            array(
-                'key' => 'field_cs_client_name',
-                'label' => 'Client Name',
-                'name' => 'client_name',
-                'type' => 'text',
-            ),
-            array(
-                'key' => 'field_cs_summary',
-                'label' => 'Card Short Summary',
-                'name' => 'card_summary',
-                'type' => 'textarea',
-                'rows' => 2,
-            ),
-            array(
-                'key' => 'field_cs_metrics',
-                'label' => 'Impact Metrics (3 Items)',
-                'name' => 'impact_metrics',
-                'type' => 'repeater',
-                'layout' => 'table',
-                'button_label' => 'Add Metric',
-                'sub_fields' => array(
-                    array(
-                        'key' => 'field_cs_metric_val',
-                        'label' => 'Value (e.g. ₹180Cr+, +210%)',
-                        'name' => 'metric_value',
-                        'type' => 'text',
-                    ),
-                    array(
-                        'key' => 'field_cs_metric_lbl',
-                        'label' => 'Label (e.g. Pipeline Influenced)',
-                        'name' => 'metric_label',
-                        'type' => 'text',
-                    ),
-                ),
-            ),
-        ),
-        'location' => array(
-            array(
-                array(
-                    'param' => 'post_type',
-                    'operator' => '==',
-                    'value' => 'case_study',
                 ),
             ),
         ),

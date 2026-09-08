@@ -1,10 +1,7 @@
 <?php
 /**
  * Dynamic ACF Home Hero Section
- * Looks up fields from:
- * 1. Current Page fields (get_field)
- * 2. ACF Options Page (get_field(..., 'option'))
- * 3. Default high-end CI360 fallbacks
+ * Fully supports ACF Free, ACF Pro, and Direct Video Link field.
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -44,119 +41,76 @@ $hero_btn1_url    = ci360_get_dynamic_hero_val( 'hero_btn1_url', home_url( '/con
 $hero_btn2_text   = ci360_get_dynamic_hero_val( 'hero_btn2_text', 'Explore Our Work' );
 $hero_btn2_url    = ci360_get_dynamic_hero_val( 'hero_btn2_url', home_url( '/projects/' ) );
 
-// 3. Stats / Metrics
-$hero_stats = array();
-if ( function_exists( 'have_rows' ) && ( have_rows( 'hero_stats_repeater' ) || have_rows( 'hero_stats_repeater', 'option' ) ) ) {
-    $rows = have_rows( 'hero_stats_repeater' ) ? 'hero_stats_repeater' : array( 'hero_stats_repeater', 'option' );
-    if ( is_array( $rows ) ) {
-        while ( have_rows( $rows[0], $rows[1] ) ) {
-            the_row();
-            $hero_stats[] = array(
-                'value' => get_sub_field( 'stat_value' ),
-                'label' => get_sub_field( 'stat_label' ),
-                'color' => get_sub_field( 'stat_color' ) ?: 'text-cyan-400',
-            );
-        }
-    } else {
-        while ( have_rows( $rows ) ) {
-            the_row();
-            $hero_stats[] = array(
-                'value' => get_sub_field( 'stat_value' ),
-                'label' => get_sub_field( 'stat_label' ),
-                'color' => get_sub_field( 'stat_color' ) ?: 'text-cyan-400',
-            );
-        }
-    }
-}
+// 3. Stats / Metrics (Direct fields + repeater fallback)
+$stat1_val = ci360_get_dynamic_hero_val( 'hero_stat1_value', '₹450Cr+' );
+$stat1_lbl = ci360_get_dynamic_hero_val( 'hero_stat1_label', 'Client Revenue' );
+$stat2_val = ci360_get_dynamic_hero_val( 'hero_stat2_value', '98.4%' );
+$stat2_lbl = ci360_get_dynamic_hero_val( 'hero_stat2_label', 'Client Retention' );
+$stat3_val = ci360_get_dynamic_hero_val( 'hero_stat3_value', '3 Studios' );
+$stat3_lbl = ci360_get_dynamic_hero_val( 'hero_stat3_label', 'Ahmedabad • Delhi • USA' );
+$stat4_val = ci360_get_dynamic_hero_val( 'hero_stat4_value', '< 1.2s' );
+$stat4_lbl = ci360_get_dynamic_hero_val( 'hero_stat4_label', 'Page Speed' );
 
-if ( empty( $hero_stats ) ) {
-    $hero_stats = array(
-        array( 'value' => '₹450Cr+', 'label' => 'Client Revenue', 'color' => 'text-emerald-400' ),
-        array( 'value' => '98.4%', 'label' => 'Client Retention', 'color' => 'text-cyan-400' ),
-        array( 'value' => '3 Studios', 'label' => 'Ahmedabad • Delhi • USA', 'color' => 'text-blue-400' ),
-        array( 'value' => '< 1.2s', 'label' => 'Page Speed', 'color' => 'text-indigo-400' ),
-    );
-}
+$hero_stats = array(
+    array( 'value' => $stat1_val, 'label' => $stat1_lbl, 'color' => 'text-emerald-400' ),
+    array( 'value' => $stat2_val, 'label' => $stat2_lbl, 'color' => 'text-cyan-400' ),
+    array( 'value' => $stat3_val, 'label' => $stat3_lbl, 'color' => 'text-blue-400' ),
+    array( 'value' => $stat4_val, 'label' => $stat4_lbl, 'color' => 'text-indigo-400' ),
+);
 
-// 4. Showcase Slides
-$hero_slides = array();
-if ( function_exists( 'have_rows' ) && ( have_rows( 'hero_slides_repeater' ) || have_rows( 'hero_slides_repeater', 'option' ) ) ) {
-    $slide_source = have_rows( 'hero_slides_repeater' ) ? 'hero_slides_repeater' : array( 'hero_slides_repeater', 'option' );
-    if ( is_array( $slide_source ) ) {
-        while ( have_rows( $slide_source[0], $slide_source[1] ) ) {
-            the_row();
-            $img_field = get_sub_field( 'slide_image' );
-            $img_url   = is_array( $img_field ) ? $img_field['url'] : $img_field;
-            $video_val = get_sub_field( 'slide_video_url' );
+// 4. Video URL & Slides Data
+$video_url   = ci360_get_dynamic_hero_val( 'hero_video_url', 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/uploads/2026/09/WhatsApp-Video-2026-09-08-at-15.18.30.mp4' );
+$video_title = ci360_get_dynamic_hero_val( 'hero_video_title', '3D CGI & Motion Graphics' );
+$video_tag   = ci360_get_dynamic_hero_val( 'hero_video_tag', 'Project' );
+$video_desc  = ci360_get_dynamic_hero_val( 'hero_video_desc', 'Photorealistic 3D product visualizations, virtual environments, and motion narratives.' );
 
-            $hero_slides[] = array(
-                'image'    => $img_url,
-                'videoUrl' => $video_val,
-                'title'    => get_sub_field( 'slide_title' ),
-                'tag'      => get_sub_field( 'slide_tag' ),
-                'desc'     => get_sub_field( 'slide_description' ),
-            );
-        }
-    } else {
-        while ( have_rows( $slide_source ) ) {
-            the_row();
-            $img_field = get_sub_field( 'slide_image' );
-            $img_url   = is_array( $img_field ) ? $img_field['url'] : $img_field;
-            $video_val = get_sub_field( 'slide_video_url' );
+$asset_base = 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images';
 
-            $hero_slides[] = array(
-                'image'    => $img_url,
-                'videoUrl' => $video_val,
-                'title'    => get_sub_field( 'slide_title' ),
-                'tag'      => get_sub_field( 'slide_tag' ),
-                'desc'     => get_sub_field( 'slide_description' ),
-            );
-        }
-    }
-}
+$slide1_img = ci360_get_dynamic_hero_val( 'hero_slide1_image', $asset_base . '/DESIGN_1600x900.jpg' );
+$slide2_img = ci360_get_dynamic_hero_val( 'hero_slide2_image', $asset_base . '/bulb-2.png' );
+$slide3_img = ci360_get_dynamic_hero_val( 'hero_slide3_image', $asset_base . '/MEDIA_1600x900.jpg' );
+$slide5_img = ci360_get_dynamic_hero_val( 'hero_slide5_image', $asset_base . '/WEB_1600x900.jpg' );
+$slide6_img = ci360_get_dynamic_hero_val( 'hero_slide6_image', $asset_base . '/podcast1.png' );
 
-if ( empty( $hero_slides ) ) {
-    $asset_base = 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images';
-    $hero_slides = array(
-        array(
-            'image' => $asset_base . '/DESIGN_1600x900.jpg',
-            'title' => 'Brand Architecture & Design',
-            'tag'   => 'Visual Moats',
-            'desc'  => 'Crafting iconic visual identities, packaging, and design systems that define category leaders.',
-        ),
-        array(
-            'image' => $asset_base . '/bulb-2.png',
-            'title' => 'Strategic Storytelling',
-            'tag'   => 'Creative Strategy',
-            'desc'  => 'Unlocking profound business insights to build emotional resonance and enduring client trust.',
-        ),
-        array(
-            'image' => $asset_base . '/MEDIA_1600x900.jpg',
-            'title' => 'Commercial Film & Media',
-            'tag'   => 'Production',
-            'desc'  => 'High-touch cinematography, national TVCs, and high-impact digital campaigns.',
-        ),
-        array(
-            'image'    => $asset_base . '/ANIMATION_1600x900.jpg',
-            'videoUrl' => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/uploads/2026/09/WhatsApp-Video-2026-09-08-at-15.18.30.mp4',
-            'title'    => '3D CGI & Motion Graphics',
-            'tag'      => 'Project',
-            'desc'     => 'Photorealistic 3D product visualizations, virtual environments, and motion narratives.',
-        ),
-        array(
-            'image' => $asset_base . '/WEB_1600x900.jpg',
-            'title' => 'Websites & Digital Experiences',
-            'tag'   => 'Engineering',
-            'desc'  => 'Sub-second Next.js architectures, headless CMS integrations, and conversion-optimized UX.',
-        ),
-        array(
-            'image' => $asset_base . '/podcast1.png',
-            'title' => 'Sound-Treated 4K Studios',
-            'tag'   => 'Broadcasting',
-            'desc'  => 'In-house broadcast audio podcast suites, multi-cam capture, and transatlantic live bridges.',
-        ),
-    );
-}
+$hero_slides = array(
+    array(
+        'image' => is_array( $slide1_img ) ? $slide1_img['url'] : $slide1_img,
+        'title' => 'Brand Architecture & Design',
+        'tag'   => 'Visual Moats',
+        'desc'  => 'Crafting iconic visual identities, packaging, and design systems that define category leaders.',
+    ),
+    array(
+        'image' => is_array( $slide2_img ) ? $slide2_img['url'] : $slide2_img,
+        'title' => 'Strategic Storytelling',
+        'tag'   => 'Creative Strategy',
+        'desc'  => 'Unlocking profound business insights to build emotional resonance and enduring client trust.',
+    ),
+    array(
+        'image' => is_array( $slide3_img ) ? $slide3_img['url'] : $slide3_img,
+        'title' => 'Commercial Film & Media',
+        'tag'   => 'Production',
+        'desc'  => 'High-touch cinematography, national TVCs, and high-impact digital campaigns.',
+    ),
+    array(
+        'image'    => $asset_base . '/ANIMATION_1600x900.jpg',
+        'videoUrl' => $video_url,
+        'title'    => $video_title,
+        'tag'      => $video_tag,
+        'desc'     => $video_desc,
+    ),
+    array(
+        'image' => is_array( $slide5_img ) ? $slide5_img['url'] : $slide5_img,
+        'title' => 'Websites & Digital Experiences',
+        'tag'   => 'Engineering',
+        'desc'  => 'Sub-second Next.js architectures, headless CMS integrations, and conversion-optimized UX.',
+    ),
+    array(
+        'image' => is_array( $slide6_img ) ? $slide6_img['url'] : $slide6_img,
+        'title' => 'Sound-Treated 4K Studios',
+        'tag'   => 'Broadcasting',
+        'desc'  => 'In-house broadcast audio podcast suites, multi-cam capture, and transatlantic live bridges.',
+    ),
+);
 
 $first_slide = $hero_slides[0] ?? array();
 ?>
