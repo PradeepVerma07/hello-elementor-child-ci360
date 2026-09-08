@@ -1,6 +1,6 @@
 <?php
 /**
- * Dynamic Real WordPress Blog Grid with Category Include/Exclude Meta Controls
+ * Dynamic Real WordPress Blog Grid with Premium Hero Section & Category Meta Controls
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -29,16 +29,30 @@ if ( ! function_exists( 'ci360_get_blog_val' ) ) {
     }
 }
 
-// 1. Header & Text Controls
-$blog_badge   = ci360_get_blog_val( 'blog_badge_text', 'Insights & Perspectives' );
-$blog_title   = ci360_get_blog_val( 'blog_title_text', 'The CI360 Journal' );
-$blog_desc    = ci360_get_blog_val( 'blog_description', 'Original thoughts, strategic frameworks, and deep dives on digital transformation, performance design, and modern brand leadership.' );
-$posts_per_pg = intval( ci360_get_blog_val( 'blog_posts_per_page', 9 ) );
+if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
+    function ci360_calc_reading_time( $content ) {
+        $word_count = str_word_count( strip_tags( $content ) );
+        $reading_time = ceil( $word_count / 200 );
+        return max( 1, $reading_time );
+    }
+}
+
+// 1. Hero Section Content & Media Controls
+$hero_badge    = ci360_get_blog_val( 'blog_hero_badge', 'Editorial & Strategic Insights' );
+$hero_pre      = ci360_get_blog_val( 'blog_hero_title_prefix', 'Perspectives That' );
+$hero_high     = ci360_get_blog_val( 'blog_hero_title_highlight', 'Shape The Future' );
+$hero_post     = ci360_get_blog_val( 'blog_hero_title_suffix', 'of Digital Leadership.' );
+$hero_desc     = ci360_get_blog_val( 'blog_hero_description', 'Original frameworks, strategic foresight, and deep-dive analysis on digital architecture, brand velocity, and transformative technology.' );
+$hero_img      = ci360_get_blog_val( 'blog_hero_image_url', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop' );
+$hero_video    = ci360_get_blog_val( 'blog_hero_video_url', '' );
+$hero_card_tag = ci360_get_blog_val( 'blog_hero_card_tag', 'Executive Briefing' );
+$hero_card_ttl = ci360_get_blog_val( 'blog_hero_card_title', 'Architecting Modern Enterprise Moats in the Age of AI' );
+$hero_card_dsc = ci360_get_blog_val( 'blog_hero_card_desc', 'How forward-thinking brands bridge the gap between human storytelling and autonomous digital scale.' );
+
+// 2. Query & Category Controls
+$posts_per_pg    = intval( ci360_get_blog_val( 'blog_posts_per_page', 9 ) );
 if ( $posts_per_pg <= 0 ) $posts_per_pg = 9;
 
-$show_featured = ci360_get_blog_val( 'blog_show_featured', '1' );
-
-// 2. Category Include / Exclude Filters
 $cat_include_raw = ci360_get_blog_val( 'blog_include_categories', '' );
 $cat_exclude_raw = ci360_get_blog_val( 'blog_exclude_categories', '' );
 
@@ -125,16 +139,7 @@ if ( $active_cat_id > 0 ) {
 }
 
 $blog_query = new WP_Query( $query_args );
-
-// Helper for reading time
-if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
-    function ci360_calc_reading_time( $content ) {
-    $word_count = str_word_count( strip_tags( $content ) );
-    $reading_time = ceil( $word_count / 200 );
-    return max( 1, $reading_time );
-}
-
-}
+$current_page_url = ! empty( $_SERVER["REQUEST_URI"] ) ? strtok( $_SERVER["REQUEST_URI"], '?' ) : get_permalink();
 ?>
 
 <!-- Google Fonts & Tailwind CDN -->
@@ -158,21 +163,21 @@ if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
 
 <style>
 /* =========================================================
-   SCOPED BLOG GRID STYLES - ZERO PINK, PURE CYAN & BLUE
+   SCOPED BLOG HERO & GRID STYLES - ZERO PINK, PURE CYAN & BLUE
 ========================================================= */
 #ci360-blog-section {
     position: relative;
     background-color: #020617;
     color: #ffffff;
     font-family: 'Inter', sans-serif;
-    padding: 90px 24px 100px 24px;
+    padding: 80px 24px 100px 24px;
     box-sizing: border-box;
     overflow: hidden;
 }
 
 @media (min-width: 1024px) {
     #ci360-blog-section {
-        padding: 110px 48px 120px 48px;
+        padding: 90px 48px 120px 48px;
     }
 }
 
@@ -183,26 +188,66 @@ if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
 /* Background Ambient Glows */
 #ci360-blog-section .blog-glow-1 {
     position: absolute;
-    top: 10%;
-    left: 15%;
-    width: 550px;
-    height: 550px;
+    top: 5%;
+    left: 10%;
+    width: 600px;
+    height: 600px;
     background: rgba(6, 182, 212, 0.08);
     border-radius: 9999px;
-    filter: blur(150px);
+    filter: blur(160px);
     pointer-events: none;
 }
 
 #ci360-blog-section .blog-glow-2 {
     position: absolute;
-    bottom: 10%;
-    right: 10%;
-    width: 500px;
-    height: 500px;
+    top: 40%;
+    right: 5%;
+    width: 550px;
+    height: 550px;
     background: rgba(37, 99, 235, 0.09);
     border-radius: 9999px;
-    filter: blur(160px);
+    filter: blur(170px);
     pointer-events: none;
+}
+
+/* Hero Showcase Card */
+#ci360-blog-section .blog-hero-showcase {
+    position: relative;
+    min-height: 420px;
+    border-radius: 28px;
+    overflow: hidden;
+    background-color: #0f172a;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(51, 65, 85, 0.85);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#ci360-blog-section .blog-hero-showcase:hover {
+    transform: translateY(-4px);
+    border-color: rgba(6, 182, 212, 0.7);
+    box-shadow: 0 24px 60px rgba(6, 182, 212, 0.22);
+}
+
+#ci360-blog-section .blog-hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+#ci360-blog-section .blog-hero-overlay {
+    position: relative;
+    z-index: 2;
+    padding: 32px 34px;
+    background: linear-gradient(to top, rgba(2, 6, 23, 0.98) 0%, rgba(2, 6, 23, 0.75) 60%, transparent 100%);
 }
 
 /* Category Filter Tabs */
@@ -210,13 +255,13 @@ if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 18px;
+    padding: 9px 20px;
     border-radius: 50px;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    background: rgba(15, 23, 42, 0.8);
+    background: rgba(15, 23, 42, 0.85);
     border: 1px solid rgba(51, 65, 85, 0.8);
     color: #94a3b8;
     text-decoration: none;
@@ -234,54 +279,6 @@ if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
     color: #ffffff;
     border-color: transparent;
     box-shadow: 0 4px 15px rgba(6, 182, 212, 0.35);
-}
-
-/* Featured Large Blog Card */
-#ci360-blog-section .featured-blog-card {
-    position: relative;
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(51, 65, 85, 0.85);
-    border-radius: 28px;
-    overflow: hidden;
-    backdrop-filter: blur(14px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    text-decoration: none !important;
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-@media (min-width: 1024px) {
-    #ci360-blog-section .featured-blog-card {
-        grid-template-columns: 1.15fr 1fr;
-    }
-}
-
-#ci360-blog-section .featured-blog-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(6, 182, 212, 0.7);
-    box-shadow: 0 24px 60px rgba(6, 182, 212, 0.22);
-}
-
-#ci360-blog-section .featured-blog-img {
-    min-height: 320px;
-    background-size: cover;
-    background-position: center;
-    background-color: #0f172a;
-    position: relative;
-}
-
-#ci360-blog-section .featured-blog-img::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, transparent 60%, rgba(15, 23, 42, 0.85) 100%);
-}
-
-@media (max-width: 1023px) {
-    #ci360-blog-section .featured-blog-img::after {
-        background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, transparent 100%);
-    }
 }
 
 /* Standard Blog Cards */
@@ -326,11 +323,9 @@ if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
     font-weight: 700;
     line-height: 1.35;
     margin: 0;
-    transition: none;
 }
 
-#ci360-blog-section .blog-card:hover .blog-title,
-#ci360-blog-section .featured-blog-card:hover .blog-title {
+#ci360-blog-section .blog-card:hover .blog-title {
     color: #ffffff !important;
 }
 
@@ -371,27 +366,79 @@ if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
   <div class="blog-glow-2"></div>
 
   <div class="max-w-7xl mx-auto relative z-10">
-    <!-- Top Section Header -->
-    <div class="text-center max-w-3xl mx-auto mb-12">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-widest mb-4 shadow-sm">
-        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-        <?php echo esc_html( $blog_badge ); ?>
+    
+    <!-- =========================================================================
+         1. HERO SECTION (Matching Theme Hero Style)
+    ========================================================================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center mb-16 lg:mb-20">
+      
+      <!-- Left Column: Headlines & Text (7 cols) -->
+      <div class="lg:col-span-7 flex flex-col justify-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-widest mb-6 w-fit shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          <?php echo esc_html( $hero_badge ); ?>
+        </div>
+
+        <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight mb-6">
+          <?php echo esc_html( $hero_pre ); ?> 
+          <span class="bg-gradient-to-r from-sky-400 via-cyan-400 to-teal-300 bg-clip-text text-transparent">
+            <?php echo esc_html( $hero_high ); ?>
+          </span> 
+          <?php echo esc_html( $hero_post ); ?>
+        </h1>
+
+        <p class="text-base md:text-lg text-slate-300 font-light leading-relaxed mb-8 max-w-2xl">
+          <?php echo esc_html( $hero_desc ); ?>
+        </p>
+
+        <!-- Micro Badges / Stats -->
+        <div class="flex flex-wrap items-center gap-6 pt-6 border-t border-slate-800/80 text-xs text-slate-400 font-medium">
+          <div class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+            100% Original Strategy
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+            Cross-Disciplinary Rigor
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            Open Access
+          </div>
+        </div>
       </div>
-      <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4">
-        <?php echo esc_html( $blog_title ); ?>
-      </h1>
-      <p class="text-sm md:text-base text-slate-400 font-light leading-relaxed">
-        <?php echo esc_html( $blog_desc ); ?>
-      </p>
+
+      <!-- Right Column: High-Tech Hero Media Showcase Card (5 cols) -->
+      <div class="lg:col-span-5">
+        <div class="blog-hero-showcase" style="background-image:url('<?php echo esc_url( $hero_img ); ?>');">
+          <?php if ( ! empty( $hero_video ) ) : ?>
+          <video class="blog-hero-video" autoplay muted loop playsinline src="<?php echo esc_url( $hero_video ); ?>"></video>
+          <?php endif; ?>
+          <div class="blog-hero-overlay">
+            <span class="inline-flex px-3 py-1 rounded-full text-[10.5px] font-bold uppercase tracking-wider bg-gradient-to-r from-sky-600 to-cyan-500 text-white shadow-sm mb-2.5">
+              <?php echo esc_html( $hero_card_tag ); ?>
+            </span>
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-2 leading-snug">
+              <?php echo esc_html( $hero_card_ttl ); ?>
+            </h3>
+            <p class="text-slate-300 text-xs md:text-sm font-light leading-relaxed">
+              <?php echo esc_html( $hero_card_dsc ); ?>
+            </p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Category Filter Tabs -->
+    <!-- Divider Bar -->
+    <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-700/80 to-transparent mb-12"></div>
+
+    <!-- =========================================================================
+         2. CATEGORY FILTER TABS
+    ========================================================================= -->
     <?php if ( ! empty( $available_categories ) && ! is_wp_error( $available_categories ) ) : ?>
     <div class="flex flex-wrap items-center justify-center gap-2.5 mb-14">
-      <?php 
-      $current_page_url = ! empty( $_SERVER["REQUEST_URI"] ) ? ( ! empty( $_SERVER["REQUEST_URI"] ) ? strtok( $_SERVER["REQUEST_URI"], '?' ) : get_permalink() ) : get_permalink();
-      $all_active = empty( $active_cat_slug ) ? 'active' : '';
-      ?>
+      <?php $all_active = empty( $active_cat_slug ) ? 'active' : ''; ?>
       <a href="<?php echo esc_url( $current_page_url ); ?>" class="cat-filter-btn <?php echo $all_active; ?>">
         All Articles
       </a>
@@ -407,69 +454,11 @@ if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
     </div>
     <?php endif; ?>
 
+    <!-- =========================================================================
+         3. REAL BLOG POSTS GRID
+    ========================================================================= -->
     <?php if ( $blog_query->have_posts() ) : ?>
-      <?php 
-      $post_counter = 0;
-      $has_featured = false;
-      ?>
-
-      <!-- Optional Top Featured Post on Page 1 -->
-      <?php if ( $paged === 1 && $show_featured === '1' && $blog_query->post_count >= 1 ) : ?>
-        <?php 
-        $blog_query->the_post();
-        $post_counter++;
-        $has_featured = true;
-        $f_id = get_the_ID();
-        $f_img = get_the_post_thumbnail_url( $f_id, 'full' );
-        if ( ! $f_img ) {
-            $f_img = 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop';
-        }
-        $f_cats = get_the_category();
-        $f_cat_name = ! empty( $f_cats ) ? $f_cats[0]->name : 'Insights';
-        $f_time = ci360_calc_reading_time( get_the_content() );
-        ?>
-        <div class="mb-14">
-          <a href="<?php the_permalink(); ?>" class="featured-blog-card group">
-            <div class="featured-blog-img" style="background-image:url('<?php echo esc_url( $f_img ); ?>');"></div>
-            <div class="p-8 md:p-12 flex flex-col justify-between">
-              <div>
-                <div class="flex items-center gap-3 mb-4">
-                  <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-sky-600 to-cyan-500 text-white shadow-sm">
-                    <?php echo esc_html( $f_cat_name ); ?>
-                  </span>
-                  <span class="text-xs text-slate-400 font-medium">
-                    <?php echo get_the_date( 'M j, Y' ); ?> • <?php echo $f_time; ?> min read
-                  </span>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-extrabold text-white blog-title mb-4">
-                  <?php the_title(); ?>
-                </h2>
-                <p class="text-slate-300 text-sm md:text-base font-light leading-relaxed mb-6">
-                  <?php echo wp_trim_words( get_the_excerpt() ?: get_the_content(), 28, '...' ); ?>
-                </p>
-              </div>
-
-              <div class="flex items-center justify-between pt-6 border-t border-slate-800/80">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xs font-bold uppercase">
-                    <?php echo esc_html( substr( get_the_author(), 0, 1 ) ); ?>
-                  </div>
-                  <span class="text-xs font-semibold text-slate-300"><?php the_author(); ?></span>
-                </div>
-                <span class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 group-hover:translate-x-1 transition-transform">
-                  Read Article 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14"></path>
-                    <path d="m12 5 7 7-7 7"></path>
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </a>
-        </div>
-      <?php endif; ?>
-
-      <!-- 3-Column Blog Cards Grid -->
+      
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <?php while ( $blog_query->have_posts() ) : $blog_query->the_post(); ?>
           <?php 
@@ -552,7 +541,7 @@ if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
         <p class="text-slate-400 text-sm font-light mb-6">
           No published blog posts match the selected criteria. Publish real posts under <strong>Posts > Add New</strong> in WordPress admin.
         </p>
-        <a href="<?php echo esc_url( strtok( $_SERVER["REQUEST_URI"], '?' ) ); ?>" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-cyan-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-cyan-500 transition-colors">
+        <a href="<?php echo esc_url( $current_page_url ); ?>" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-cyan-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-cyan-500 transition-colors">
           View All Categories
         </a>
       </div>

@@ -693,34 +693,91 @@ if ( ! function_exists( 'ci360_acf_register_all_local_fields' ) ) {
         );
 
         // Tab 7: Blog & Insights Page Settings
+        
+        // Tab 7: Blog Hero & Insights Page Settings
         $hero_fields[] = array(
             'key' => 'field_tab_blog_settings',
-            'label' => 'Blog & Insights Page Settings',
+            'label' => 'Blog Hero & Query Settings',
             'type' => 'tab',
         );
         $hero_fields[] = array(
-            'key' => 'field_blog_badge_text',
-            'label' => 'Blog Badge Text',
-            'name' => 'blog_badge_text',
+            'key' => 'field_blog_hero_badge',
+            'label' => 'Blog Hero Top Badge',
+            'name' => 'blog_hero_badge',
             'type' => 'text',
-            'default_value' => 'Insights & Perspectives',
+            'default_value' => 'Editorial & Strategic Insights',
             'wrapper' => array( 'width' => '50' ),
         );
         $hero_fields[] = array(
-            'key' => 'field_blog_title_text',
-            'label' => 'Blog Page Title',
-            'name' => 'blog_title_text',
+            'key' => 'field_blog_hero_title_prefix',
+            'label' => 'Hero Title Top Line',
+            'name' => 'blog_hero_title_prefix',
             'type' => 'text',
-            'default_value' => 'The CI360 Journal',
+            'default_value' => 'Perspectives That',
             'wrapper' => array( 'width' => '50' ),
         );
         $hero_fields[] = array(
-            'key' => 'field_blog_description',
-            'label' => 'Blog Description',
-            'name' => 'blog_description',
+            'key' => 'field_blog_hero_title_highlight',
+            'label' => 'Hero Title Highlight (Cyan Gradient)',
+            'name' => 'blog_hero_title_highlight',
+            'type' => 'text',
+            'default_value' => 'Shape The Future',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_blog_hero_title_suffix',
+            'label' => 'Hero Title Bottom Line',
+            'name' => 'blog_hero_title_suffix',
+            'type' => 'text',
+            'default_value' => 'of Digital Leadership.',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_blog_hero_description',
+            'label' => 'Hero Description Paragraph',
+            'name' => 'blog_hero_description',
+            'type' => 'textarea',
+            'rows' => 3,
+            'default_value' => 'Original frameworks, strategic foresight, and deep-dive analysis on digital architecture, brand velocity, and transformative technology.',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_blog_hero_image_url',
+            'label' => 'Hero Right Showcase Image Link (URL)',
+            'name' => 'blog_hero_image_url',
+            'type' => 'url',
+            'instructions' => 'Paste image URL for the right-side hero showcase card.',
+            'default_value' => 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_blog_hero_video_url',
+            'label' => 'Hero Right Showcase Video Link (Optional MP4)',
+            'name' => 'blog_hero_video_url',
+            'type' => 'url',
+            'default_value' => '',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_blog_hero_card_tag',
+            'label' => 'Hero Showcase Badge',
+            'name' => 'blog_hero_card_tag',
+            'type' => 'text',
+            'default_value' => 'Executive Briefing',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_blog_hero_card_title',
+            'label' => 'Hero Showcase Card Title',
+            'name' => 'blog_hero_card_title',
+            'type' => 'text',
+            'default_value' => 'Architecting Modern Enterprise Moats in the Age of AI',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_blog_hero_card_desc',
+            'label' => 'Hero Showcase Card Subtext',
+            'name' => 'blog_hero_card_desc',
             'type' => 'textarea',
             'rows' => 2,
-            'default_value' => 'Original thoughts, strategic frameworks, and deep dives on digital transformation, performance design, and modern brand leadership.',
+            'default_value' => 'How forward-thinking brands bridge the gap between human storytelling and autonomous digital scale.',
         );
         $hero_fields[] = array(
             'key' => 'field_blog_include_categories',
@@ -744,15 +801,6 @@ if ( ! function_exists( 'ci360_acf_register_all_local_fields' ) ) {
             'name' => 'blog_posts_per_page',
             'type' => 'number',
             'default_value' => 9,
-            'wrapper' => array( 'width' => '50' ),
-        );
-        $hero_fields[] = array(
-            'key' => 'field_blog_show_featured',
-            'label' => 'Display Large Top Featured Article',
-            'name' => 'blog_show_featured',
-            'type' => 'true_false',
-            'ui' => 1,
-            'default_value' => 1,
             'wrapper' => array( 'width' => '50' ),
         );
 
