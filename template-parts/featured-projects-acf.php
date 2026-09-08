@@ -38,10 +38,22 @@ $args = array(
     'post_type'      => 'case_study',
     'posts_per_page' => 4,
     'post_status'    => 'publish',
-    'orderby'        => 'menu_order date',
+    'meta_key'       => 'is_featured_project',
+    'orderby'        => 'meta_value_num menu_order date',
     'order'          => 'DESC',
 );
 $cs_query = new WP_Query( $args );
+
+// Fallback query if meta_key filtering yields no posts
+if ( ! $cs_query->have_posts() ) {
+    $cs_query = new WP_Query( array(
+        'post_type'      => 'case_study',
+        'posts_per_page' => 4,
+        'post_status'    => 'publish',
+        'orderby'        => 'menu_order date',
+        'order'          => 'DESC',
+    ) );
+}
 
 $projects = array();
 
@@ -61,12 +73,29 @@ if ( $cs_query->have_posts() ) {
             $cat_name = $terms[0]->name;
         }
 
-        $client_name = function_exists( 'get_field' ) ? get_field( 'client_name', $post_id ) : '';
+        $client_name = get_post_meta( $post_id, 'client_name', true );
+        if ( empty( $client_name ) && function_exists( 'get_field' ) ) {
+            $client_name = get_field( 'client_name', $post_id );
+        }
         $card_cat_label = $client_name ? ( $cat_name . ' • Client: ' . $client_name ) : $cat_name;
 
-        $excerpt = get_the_excerpt();
-        if ( empty( $excerpt ) ) {
-            $excerpt = wp_trim_words( get_the_content(), 18, '...' );
+        $custom_summary = get_post_meta( $post_id, 'card_summary', true );
+        if ( empty( $custom_summary ) && function_exists( 'get_field' ) ) {
+            $custom_summary = get_field( 'card_summary', $post_id );
+        }
+        if ( empty( $custom_summary ) ) {
+            $custom_summary = get_the_excerpt();
+        }
+        if ( empty( $custom_summary ) ) {
+            $custom_summary = wp_trim_words( get_the_content(), 18, '...' );
+        }
+
+        $custom_url = get_post_meta( $post_id, 'custom_case_study_url', true );
+        if ( empty( $custom_url ) && function_exists( 'get_field' ) ) {
+            $custom_url = get_field( 'custom_case_study_url', $post_id );
+        }
+        if ( empty( $custom_url ) ) {
+            $custom_url = get_permalink();
         }
 
         $projects[] = array(
@@ -74,9 +103,9 @@ if ( $cs_query->have_posts() ) {
             'title'    => get_the_title(),
             'cat'      => $card_cat_label,
             'badge'    => $cat_name,
-            'excerpt'  => $excerpt,
+            'excerpt'  => $custom_summary,
             'image'    => $thumb_url,
-            'url'      => get_permalink(),
+            'url'      => $custom_url,
         );
     }
     wp_reset_postdata();
