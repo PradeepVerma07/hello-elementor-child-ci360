@@ -1,7 +1,6 @@
 <?php
 /**
- * Dynamic ACF Home Hero Section
- * Fully supports ACF Free, ACF Pro, and Direct Video Link field.
+ * Dynamic ACF Home Hero Section with 6 Video Slides
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -41,7 +40,7 @@ $hero_btn1_url    = ci360_get_dynamic_hero_val( 'hero_btn1_url', home_url( '/con
 $hero_btn2_text   = ci360_get_dynamic_hero_val( 'hero_btn2_text', 'Explore Our Work' );
 $hero_btn2_url    = ci360_get_dynamic_hero_val( 'hero_btn2_url', home_url( '/projects/' ) );
 
-// 3. Stats / Metrics (Direct fields + repeater fallback)
+// 3. Stats / Metrics
 $stat1_val = ci360_get_dynamic_hero_val( 'hero_stat1_value', '₹450Cr+' );
 $stat1_lbl = ci360_get_dynamic_hero_val( 'hero_stat1_label', 'Client Revenue' );
 $stat2_val = ci360_get_dynamic_hero_val( 'hero_stat2_value', '98.4%' );
@@ -58,59 +57,69 @@ $hero_stats = array(
     array( 'value' => $stat4_val, 'label' => $stat4_lbl, 'color' => 'text-indigo-400' ),
 );
 
-// 4. Video URL & Slides Data
-$video_url   = ci360_get_dynamic_hero_val( 'hero_video_url', 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/uploads/2026/09/WhatsApp-Video-2026-09-08-at-15.18.30.mp4' );
-$video_title = ci360_get_dynamic_hero_val( 'hero_video_title', '3D CGI & Motion Graphics' );
-$video_tag   = ci360_get_dynamic_hero_val( 'hero_video_tag', 'Project' );
-$video_desc  = ci360_get_dynamic_hero_val( 'hero_video_desc', 'Photorealistic 3D product visualizations, virtual environments, and motion narratives.' );
-
+// 4. 6 Slides with Video Links
 $asset_base = 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images';
-
-$slide1_img = ci360_get_dynamic_hero_val( 'hero_slide1_image', $asset_base . '/DESIGN_1600x900.jpg' );
-$slide2_img = ci360_get_dynamic_hero_val( 'hero_slide2_image', $asset_base . '/bulb-2.png' );
-$slide3_img = ci360_get_dynamic_hero_val( 'hero_slide3_image', $asset_base . '/MEDIA_1600x900.jpg' );
-$slide5_img = ci360_get_dynamic_hero_val( 'hero_slide5_image', $asset_base . '/WEB_1600x900.jpg' );
-$slide6_img = ci360_get_dynamic_hero_val( 'hero_slide6_image', $asset_base . '/podcast1.png' );
-
-$hero_slides = array(
-    array(
-        'image' => is_array( $slide1_img ) ? $slide1_img['url'] : $slide1_img,
+$default_slides = array(
+    1 => array(
         'title' => 'Brand Architecture & Design',
         'tag'   => 'Visual Moats',
         'desc'  => 'Crafting iconic visual identities, packaging, and design systems that define category leaders.',
+        'image' => $asset_base . '/DESIGN_1600x900.jpg',
+        'video' => '',
     ),
-    array(
-        'image' => is_array( $slide2_img ) ? $slide2_img['url'] : $slide2_img,
+    2 => array(
         'title' => 'Strategic Storytelling',
         'tag'   => 'Creative Strategy',
         'desc'  => 'Unlocking profound business insights to build emotional resonance and enduring client trust.',
+        'image' => $asset_base . '/bulb-2.png',
+        'video' => '',
     ),
-    array(
-        'image' => is_array( $slide3_img ) ? $slide3_img['url'] : $slide3_img,
+    3 => array(
         'title' => 'Commercial Film & Media',
         'tag'   => 'Production',
         'desc'  => 'High-touch cinematography, national TVCs, and high-impact digital campaigns.',
+        'image' => $asset_base . '/MEDIA_1600x900.jpg',
+        'video' => '',
     ),
-    array(
-        'image'    => $asset_base . '/ANIMATION_1600x900.jpg',
-        'videoUrl' => $video_url,
-        'title'    => $video_title,
-        'tag'      => $video_tag,
-        'desc'     => $video_desc,
+    4 => array(
+        'title' => '3D CGI & Motion Graphics',
+        'tag'   => 'Project',
+        'desc'  => 'Photorealistic 3D product visualizations, virtual environments, and motion narratives.',
+        'image' => $asset_base . '/ANIMATION_1600x900.jpg',
+        'video' => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/uploads/2026/09/WhatsApp-Video-2026-09-08-at-15.18.30.mp4',
     ),
-    array(
-        'image' => is_array( $slide5_img ) ? $slide5_img['url'] : $slide5_img,
+    5 => array(
         'title' => 'Websites & Digital Experiences',
         'tag'   => 'Engineering',
         'desc'  => 'Sub-second Next.js architectures, headless CMS integrations, and conversion-optimized UX.',
+        'image' => $asset_base . '/WEB_1600x900.jpg',
+        'video' => '',
     ),
-    array(
-        'image' => is_array( $slide6_img ) ? $slide6_img['url'] : $slide6_img,
+    6 => array(
         'title' => 'Sound-Treated 4K Studios',
         'tag'   => 'Broadcasting',
         'desc'  => 'In-house broadcast audio podcast suites, multi-cam capture, and transatlantic live bridges.',
+        'image' => $asset_base . '/podcast1.png',
+        'video' => '',
     ),
 );
+
+$hero_slides = array();
+for ( $i = 1; $i <= 6; $i++ ) {
+    $d = $default_slides[$i];
+    $s_video = ci360_get_dynamic_hero_val( 'hero_slide' . $i . '_video_url', $d['video'] );
+    $s_title = ci360_get_dynamic_hero_val( 'hero_slide' . $i . '_title', $d['title'] );
+    $s_tag   = ci360_get_dynamic_hero_val( 'hero_slide' . $i . '_tag', $d['tag'] );
+    $s_desc  = ci360_get_dynamic_hero_val( 'hero_slide' . $i . '_desc', $d['desc'] );
+
+    $hero_slides[] = array(
+        'image'    => $d['image'],
+        'videoUrl' => $s_video,
+        'title'    => $s_title,
+        'tag'      => $s_tag,
+        'desc'     => $s_desc,
+    );
+}
 
 $first_slide = $hero_slides[0] ?? array();
 ?>
@@ -436,7 +445,7 @@ $first_slide = $hero_slides[0] ?? array();
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-            <span id="ci360-hero-counter" class="text-xs font-mono uppercase tracking-widest text-cyan-300 font-semibold">Showcase 1 / <?php echo count( $hero_slides ); ?></span>
+            <span id="ci360-hero-counter" class="text-xs font-mono uppercase tracking-widest text-cyan-300 font-semibold">Showcase 1 / 6</span>
           </div>
           <span id="ci360-hero-tag" class="px-3 py-1 rounded-full bg-slate-800/90 text-xs font-mono text-slate-300 border border-slate-700"><?php echo esc_html( $first_slide['tag'] ?? 'Showcase' ); ?></span>
         </div>
