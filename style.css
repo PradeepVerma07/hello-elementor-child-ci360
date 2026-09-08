@@ -1,0 +1,18 @@
+/*
+Theme Name: Hello Elementor Child - CI360 ACF
+Theme URI: https://ci360degrees.com/
+Description: Dynamic, ACF-friendly Hello Elementor Child Theme for CI360 Degrees with custom hero section, featured projects, and pure cyan/blue electric palette.
+Author: CI360 Degrees
+Author URI: https://ci360degrees.com/
+Template: hello-elementor
+Version: 1.0.0
+Text Domain: hello-elementor-child-ci360-acf
+*/
+
+/* Scoped Utility & Reset */
+:root {
+    --ci-cyan: #06b6d4;
+    --ci-blue: #38bdf8;
+    --ci-dark: #020617;
+    --ci-card: #0f172a;
+}
