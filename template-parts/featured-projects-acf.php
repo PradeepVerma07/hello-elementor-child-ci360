@@ -1,7 +1,7 @@
 <?php
 /**
  * Dynamic ACF Featured Projects / Case Studies Section
- * Pulls from 'case_study' CPT and 'case_study_category' taxonomy with fallback defaults.
+ * Pulls image links, video links and content directly from ACF Theme Settings or CPT.
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -26,139 +26,112 @@ if ( ! function_exists( 'ci360_get_fp_val' ) ) {
     }
 }
 
-// Section Headings & Text from ACF
+// 1. Section Headings & Text from ACF
 $fp_badge_text    = ci360_get_fp_val( 'fp_badge_text', 'Case Studies' );
 $fp_title_main    = ci360_get_fp_val( 'fp_title_main', 'Featured Projects' );
 $fp_description   = ci360_get_fp_val( 'fp_description', 'Transforming ambitious brands into category leaders with data-driven strategy and precision design.' );
 $fp_view_all_text = ci360_get_fp_val( 'fp_view_all_text', 'View All Projects' );
 $fp_view_all_url  = ci360_get_fp_val( 'fp_view_all_url', home_url( '/case-studies/' ) );
 
-// Fetch dynamic Case Studies from CPT if available
-$args = array(
+// 2. Card 1 (Main Left 54% Featured Card)
+$card1_img   = ci360_get_fp_val( 'fp_card1_image_url', 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop' );
+$card1_video = ci360_get_fp_val( 'fp_card1_video_url', '' );
+$card1_badge = ci360_get_fp_val( 'fp_card1_badge', 'Featured Project' );
+$card1_cat   = ci360_get_fp_val( 'fp_card1_cat', 'Reality • Client: Leoz' );
+$card1_title = ci360_get_fp_val( 'fp_card1_title', 'LEOZ: Art of Ambiance & Architectural Illumination' );
+$card1_desc  = ci360_get_fp_val( 'fp_card1_desc', 'Sensory ambient lighting catalogs, 3D architectural illumination renders, and high-end interior designer partnerships.' );
+$card1_url   = ci360_get_fp_val( 'fp_card1_url', home_url( '/case-studies/leoz/' ) );
+
+// 3. Card 2 (Right Top Card)
+$card2_img   = ci360_get_fp_val( 'fp_card2_image_url', 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=800&auto=format&fit=crop' );
+$card2_cat   = ci360_get_fp_val( 'fp_card2_cat', 'Public Policy • Client: Ananta Aspen Centre' );
+$card2_title = ci360_get_fp_val( 'fp_card2_title', 'Ananta Aspen Centre: High-Level Track-II Diplomacy & Leadership' );
+$card2_desc  = ci360_get_fp_val( 'fp_card2_desc', 'International bilateral summit digital stage graphics, track-two diplomacy identity, and policy research monographs.' );
+$card2_url   = ci360_get_fp_val( 'fp_card2_url', home_url( '/case-studies/ananta-centre-aspen/' ) );
+
+// 4. Card 3 (Right Middle Card)
+$card3_img   = ci360_get_fp_val( 'fp_card3_image_url', 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop' );
+$card3_cat   = ci360_get_fp_val( 'fp_card3_cat', 'Education • Client: Chaitanya School Gandhinagar' );
+$card3_title = ci360_get_fp_val( 'fp_card3_title', 'Chaitanya School Gandhinagar: Academic Pedagogy & Campus Admissions' );
+$card3_desc  = ci360_get_fp_val( 'fp_card3_desc', 'Campus life documentary cinematography, value-based curriculum branding, and 100% capacity student admissions scaling.' );
+$card3_url   = ci360_get_fp_val( 'fp_card3_url', home_url( '/case-studies/chaitanya-school-gandhinagar/' ) );
+
+// 5. Card 4 (Right Bottom Card)
+$card4_img   = ci360_get_fp_val( 'fp_card4_image_url', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop' );
+$card4_cat   = ci360_get_fp_val( 'fp_card4_cat', 'Satcom • Client: Station Satcom' );
+$card4_title = ci360_get_fp_val( 'fp_card4_title', 'Station Satcom: B2B Satellite Telecom Modernization' );
+$card4_desc  = ci360_get_fp_val( 'fp_card4_desc', 'Global brand repositioning and Next.js portal for maritime, defense, and enterprise satellite connectivity.' );
+$card4_url   = ci360_get_fp_val( 'fp_card4_url', home_url( '/case-studies/station-satcom/' ) );
+
+// 6. Check if CPT posts exist to optionally populate cards
+$cs_query = new WP_Query( array(
     'post_type'      => 'case_study',
     'posts_per_page' => 4,
     'post_status'    => 'publish',
-    'meta_key'       => 'is_featured_project',
     'orderby'        => 'meta_value_num menu_order date',
     'order'          => 'DESC',
-);
-$cs_query = new WP_Query( $args );
+) );
 
-// Fallback query if meta_key filtering yields no posts
-if ( ! $cs_query->have_posts() ) {
-    $cs_query = new WP_Query( array(
-        'post_type'      => 'case_study',
-        'posts_per_page' => 4,
-        'post_status'    => 'publish',
-        'orderby'        => 'menu_order date',
-        'order'          => 'DESC',
-    ) );
-}
-
-$projects = array();
-
-if ( $cs_query->have_posts() ) {
+if ( $cs_query->have_posts() && $cs_query->found_posts >= 4 ) {
+    $cpt_index = 0;
     while ( $cs_query->have_posts() ) {
         $cs_query->the_post();
-        $post_id   = get_the_ID();
-        $thumb_url = get_the_post_thumbnail_url( $post_id, 'large' );
-        if ( ! $thumb_url ) {
-            $thumb_url = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop';
+        $pid = get_the_ID();
+        
+        $p_img = get_post_meta( $pid, 'project_image_url', true );
+        if ( empty( $p_img ) ) {
+            $p_img = get_the_post_thumbnail_url( $pid, 'large' );
         }
+        $p_vid = get_post_meta( $pid, 'project_video_url', true );
 
-        // Get taxonomy terms
-        $terms = get_the_terms( $post_id, 'case_study_category' );
-        $cat_name = 'Featured';
-        if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-            $cat_name = $terms[0]->name;
-        }
+        $terms = get_the_terms( $pid, 'case_study_category' );
+        $t_name = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->name : 'Featured';
+        $c_name = get_post_meta( $pid, 'client_name', true );
+        $cat_lbl = $c_name ? ( $t_name . ' • Client: ' . $c_name ) : $t_name;
 
-        $client_name = get_post_meta( $post_id, 'client_name', true );
-        if ( empty( $client_name ) && function_exists( 'get_field' ) ) {
-            $client_name = get_field( 'client_name', $post_id );
+        $p_summary = get_post_meta( $pid, 'card_summary', true );
+        if ( empty( $p_summary ) ) {
+            $p_summary = wp_trim_words( get_the_excerpt() ?: get_the_content(), 18, '...' );
         }
-        $card_cat_label = $client_name ? ( $cat_name . ' • Client: ' . $client_name ) : $cat_name;
+        $p_url = get_post_meta( $pid, 'custom_case_study_url', true ) ?: get_permalink();
 
-        $custom_summary = get_post_meta( $post_id, 'card_summary', true );
-        if ( empty( $custom_summary ) && function_exists( 'get_field' ) ) {
-            $custom_summary = get_field( 'card_summary', $post_id );
+        if ( $cpt_index === 0 ) {
+            if ( ! empty( $p_img ) ) $card1_img = $p_img;
+            if ( ! empty( $p_vid ) ) $card1_video = $p_vid;
+            $card1_cat   = $cat_lbl;
+            $card1_title = get_the_title();
+            $card1_desc  = $p_summary;
+            $card1_url   = $p_url;
+        } elseif ( $cpt_index === 1 ) {
+            if ( ! empty( $p_img ) ) $card2_img = $p_img;
+            $card2_cat   = $cat_lbl;
+            $card2_title = get_the_title();
+            $card2_desc  = $p_summary;
+            $card2_url   = $p_url;
+        } elseif ( $cpt_index === 2 ) {
+            if ( ! empty( $p_img ) ) $card3_img = $p_img;
+            $card3_cat   = $cat_lbl;
+            $card3_title = get_the_title();
+            $card3_desc  = $p_summary;
+            $card3_url   = $p_url;
+        } elseif ( $cpt_index === 3 ) {
+            if ( ! empty( $p_img ) ) $card4_img = $p_img;
+            $card4_cat   = $cat_lbl;
+            $card4_title = get_the_title();
+            $card4_desc  = $p_summary;
+            $card4_url   = $p_url;
         }
-        if ( empty( $custom_summary ) ) {
-            $custom_summary = get_the_excerpt();
-        }
-        if ( empty( $custom_summary ) ) {
-            $custom_summary = wp_trim_words( get_the_content(), 18, '...' );
-        }
-
-        $custom_url = get_post_meta( $post_id, 'custom_case_study_url', true );
-        if ( empty( $custom_url ) && function_exists( 'get_field' ) ) {
-            $custom_url = get_field( 'custom_case_study_url', $post_id );
-        }
-        if ( empty( $custom_url ) ) {
-            $custom_url = get_permalink();
-        }
-
-        $projects[] = array(
-            'id'       => $post_id,
-            'title'    => get_the_title(),
-            'cat'      => $card_cat_label,
-            'badge'    => $cat_name,
-            'excerpt'  => $custom_summary,
-            'image'    => $thumb_url,
-            'url'      => $custom_url,
-        );
+        $cpt_index++;
     }
     wp_reset_postdata();
 }
 
-// Fallback high-impact projects if CPT has fewer than 4 posts
-$fallback_projects = array(
-    array(
-        'title'    => 'LEOZ: Art of Ambiance & Architectural Illumination',
-        'cat'      => 'Reality • Client: Leoz',
-        'badge'    => 'Featured Project',
-        'excerpt'  => 'Sensory ambient lighting catalogs, 3D architectural illumination renders, and high-end interior designer partnerships.',
-        'image'    => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images/leoz-featured.jpg',
-        'url'      => home_url( '/case-studies/leoz/' ),
-    ),
-    array(
-        'title'    => 'Ananta Aspen Centre: High-Level Track-II Diplomacy & Leadership',
-        'cat'      => 'Public Policy • Client: Ananta Aspen Centre',
-        'badge'    => 'Public Policy',
-        'excerpt'  => 'International bilateral summit digital stage graphics, track-two diplomacy identity, and policy research monographs.',
-        'image'    => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images/ananta-featured.jpg',
-        'url'      => home_url( '/case-studies/ananta-centre-aspen/' ),
-    ),
-    array(
-        'title'    => 'Chaitanya School Gandhinagar: Academic Pedagogy & Campus Admissions',
-        'cat'      => 'Education • Client: Chaitanya School Gandhinagar',
-        'badge'    => 'Education',
-        'excerpt'  => 'Campus life documentary cinematography, value-based curriculum branding, and 100% capacity student admissions scaling.',
-        'image'    => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images/chaitanya-featured.jpg',
-        'url'      => home_url( '/case-studies/chaitanya-school-gandhinagar/' ),
-    ),
-    array(
-        'title'    => 'Station Satcom: B2B Satellite Telecom Modernization',
-        'cat'      => 'Satcom • Client: Station Satcom',
-        'badge'    => 'Satcom',
-        'excerpt'  => 'Global brand repositioning and Next.js portal for maritime, defense, and enterprise satellite connectivity.',
-        'image'    => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images/ss-2.jpeg',
-        'url'      => home_url( '/case-studies/station-satcom/' ),
-    ),
+$all_slides = array(
+    array( 'badge' => $card1_badge, 'cat' => $card1_cat, 'title' => $card1_title, 'image' => $card1_img, 'url' => $card1_url ),
+    array( 'badge' => 'Featured', 'cat' => $card2_cat, 'title' => $card2_title, 'image' => $card2_img, 'url' => $card2_url ),
+    array( 'badge' => 'Featured', 'cat' => $card3_cat, 'title' => $card3_title, 'image' => $card3_img, 'url' => $card3_url ),
+    array( 'badge' => 'Featured', 'cat' => $card4_cat, 'title' => $card4_title, 'image' => $card4_img, 'url' => $card4_url ),
 );
-
-// Merge: use CPT items first, fill remaining slots from fallback
-$final_projects = array();
-for ( $i = 0; $i < 4; $i++ ) {
-    if ( isset( $projects[ $i ] ) ) {
-        $final_projects[ $i ] = $projects[ $i ];
-    } else {
-        $final_projects[ $i ] = $fallback_projects[ $i ];
-    }
-}
-
-$main_featured = $final_projects[0];
-$stacked_cards = array_slice( $final_projects, 1, 3 );
 ?>
 
 <!-- Google Fonts & Tailwind CDN -->
@@ -241,10 +214,11 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
 /* Left Big Featured Card */
 #ci360-featured-projects-section .ss-fp-featured {
     flex: 0 0 54% !important;
-    min-height: 540px !important;
+    min-height: 560px !important;
     border-radius: 24px !important;
     overflow: hidden !important;
     cursor: pointer !important;
+    background-color: #0f172a !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
@@ -260,16 +234,26 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
 
 #ci360-featured-projects-section .ss-fp-featured:hover {
     transform: translateY(-4px) !important;
-    box-shadow: 0 20px 50px rgba(6, 182, 212, 0.22) !important;
-    border-color: rgba(6, 182, 212, 0.7) !important;
+    box-shadow: 0 20px 50px rgba(6, 182, 212, 0.25) !important;
+    border-color: rgba(6, 182, 212, 0.75) !important;
+}
+
+#ci360-featured-projects-section .ss-fp-video-bg {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    z-index: 1 !important;
 }
 
 #ci360-featured-projects-section .ss-fp-featured-body {
-    padding: 32px 36px !important;
+    padding: 34px 38px !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 10px !important;
-    background: linear-gradient(to top, rgba(2, 6, 23, 0.96) 0%, rgba(2, 6, 23, 0.75) 55%, transparent 100%) !important;
+    background: linear-gradient(to top, rgba(2, 6, 23, 0.98) 0%, rgba(2, 6, 23, 0.8) 55%, transparent 100%) !important;
     position: relative !important;
     z-index: 2 !important;
 }
@@ -297,7 +281,7 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
     letter-spacing: 0.08em !important;
 }
 
-/* Heading color remains solid white on hover (NO HOVER COLOR CHANGE) */
+/* Heading color remains solid white on hover */
 #ci360-featured-projects-section .ss-fp-featured-title {
     font-size: 26px !important;
     font-weight: 800 !important;
@@ -324,7 +308,7 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
     display: flex !important;
     flex-direction: column !important;
     gap: 16px !important;
-    min-height: 540px !important;
+    min-height: 560px !important;
 }
 
 #ci360-featured-projects-section .ss-fp-card {
@@ -334,7 +318,7 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
     overflow: hidden !important;
     cursor: pointer !important;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
-    background: rgba(15, 23, 42, 0.9) !important;
+    background: rgba(15, 23, 42, 0.95) !important;
     flex: 1 !important;
     min-height: 0 !important;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
@@ -342,14 +326,15 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
 }
 
 #ci360-featured-projects-section .ss-fp-card:hover {
-    box-shadow: 0 12px 30px rgba(6, 182, 212, 0.16) !important;
+    box-shadow: 0 12px 30px rgba(6, 182, 212, 0.2) !important;
     transform: translateY(-2px) !important;
-    border-color: rgba(6, 182, 212, 0.65) !important;
+    border-color: rgba(6, 182, 212, 0.75) !important;
 }
 
 #ci360-featured-projects-section .ss-fp-card-img {
     flex: 0 0 180px !important;
     min-height: 100% !important;
+    background-color: #0f172a !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
@@ -360,7 +345,7 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
     content: '' !important;
     position: absolute !important;
     inset: 0 !important;
-    background: linear-gradient(to right, transparent 60%, rgba(15, 23, 42, 0.9) 100%) !important;
+    background: linear-gradient(to right, transparent 55%, rgba(15, 23, 42, 0.95) 100%) !important;
 }
 
 #ci360-featured-projects-section .ss-fp-card-body {
@@ -381,7 +366,6 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
     color: #38bdf8 !important;
 }
 
-/* Heading color remains solid white on hover (NO HOVER COLOR CHANGE) */
 #ci360-featured-projects-section .ss-fp-card-title {
     font-size: 15px !important;
     font-weight: 700 !important;
@@ -430,6 +414,7 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
         border-radius: 20px !important;
         overflow: hidden !important;
         cursor: pointer !important;
+        background-color: #0f172a !important;
         background-size: cover !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
@@ -505,7 +490,6 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
 </style>
 
 <section id="ci360-featured-projects-section">
-  <!-- Background Glows -->
   <div class="fp-bg-glow"></div>
   <div class="fp-bg-glow-2"></div>
 
@@ -528,35 +512,57 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
 
     <!-- Desktop 2-Column Layout (Left 54% Big Featured + Right 46% Stacked 3 Cards) -->
     <div class="ss-fp-wrap">
-      <!-- Left Side Big Featured Card -->
-      <a href="<?php echo esc_url( $main_featured['url'] ); ?>" class="ss-fp-featured" style="background-image:url('<?php echo esc_url( $main_featured['image'] ); ?>');">
+      <!-- Left Side Big Featured Card (Card 1) -->
+      <a href="<?php echo esc_url( $card1_url ); ?>" class="ss-fp-featured" style="background-image:url('<?php echo esc_url( $card1_img ); ?>');">
+        <?php if ( ! empty( $card1_video ) ) : ?>
+        <video class="ss-fp-video-bg" autoplay muted loop playsinline src="<?php echo esc_url( $card1_video ); ?>"></video>
+        <?php endif; ?>
         <div class="ss-fp-featured-body">
-          <span class="ss-fp-featured-badge"><?php echo esc_html( $main_featured['badge'] ); ?></span>
-          <span class="ss-fp-featured-cat"><?php echo esc_html( $main_featured['cat'] ); ?></span>
-          <h3 class="ss-fp-featured-title"><?php echo esc_html( $main_featured['title'] ); ?></h3>
-          <p class="ss-fp-featured-excerpt"><?php echo esc_html( $main_featured['excerpt'] ); ?></p>
+          <span class="ss-fp-featured-badge"><?php echo esc_html( $card1_badge ); ?></span>
+          <span class="ss-fp-featured-cat"><?php echo esc_html( $card1_cat ); ?></span>
+          <h3 class="ss-fp-featured-title"><?php echo esc_html( $card1_title ); ?></h3>
+          <p class="ss-fp-featured-excerpt"><?php echo esc_html( $card1_desc ); ?></p>
         </div>
       </a>
 
       <!-- Right Side Stacked 3 Cards -->
       <div class="ss-fp-list">
-        <?php foreach ( $stacked_cards as $card ) : ?>
-        <a href="<?php echo esc_url( $card['url'] ); ?>" class="ss-fp-card">
-          <div class="ss-fp-card-img" style="background-image:url('<?php echo esc_url( $card['image'] ); ?>');"></div>
+        <!-- Card 2 -->
+        <a href="<?php echo esc_url( $card2_url ); ?>" class="ss-fp-card">
+          <div class="ss-fp-card-img" style="background-image:url('<?php echo esc_url( $card2_img ); ?>');"></div>
           <div class="ss-fp-card-body">
-            <span class="ss-fp-card-cat"><?php echo esc_html( $card['cat'] ); ?></span>
-            <h4 class="ss-fp-card-title"><?php echo esc_html( $card['title'] ); ?></h4>
-            <p class="ss-fp-card-excerpt"><?php echo esc_html( $card['excerpt'] ); ?></p>
+            <span class="ss-fp-card-cat"><?php echo esc_html( $card2_cat ); ?></span>
+            <h4 class="ss-fp-card-title"><?php echo esc_html( $card2_title ); ?></h4>
+            <p class="ss-fp-card-excerpt"><?php echo esc_html( $card2_desc ); ?></p>
           </div>
         </a>
-        <?php endforeach; ?>
+
+        <!-- Card 3 -->
+        <a href="<?php echo esc_url( $card3_url ); ?>" class="ss-fp-card">
+          <div class="ss-fp-card-img" style="background-image:url('<?php echo esc_url( $card3_img ); ?>');"></div>
+          <div class="ss-fp-card-body">
+            <span class="ss-fp-card-cat"><?php echo esc_html( $card3_cat ); ?></span>
+            <h4 class="ss-fp-card-title"><?php echo esc_html( $card3_title ); ?></h4>
+            <p class="ss-fp-card-excerpt"><?php echo esc_html( $card3_desc ); ?></p>
+          </div>
+        </a>
+
+        <!-- Card 4 -->
+        <a href="<?php echo esc_url( $card4_url ); ?>" class="ss-fp-card">
+          <div class="ss-fp-card-img" style="background-image:url('<?php echo esc_url( $card4_img ); ?>');"></div>
+          <div class="ss-fp-card-body">
+            <span class="ss-fp-card-cat"><?php echo esc_html( $card4_cat ); ?></span>
+            <h4 class="ss-fp-card-title"><?php echo esc_html( $card4_title ); ?></h4>
+            <p class="ss-fp-card-excerpt"><?php echo esc_html( $card4_desc ); ?></p>
+          </div>
+        </a>
       </div>
     </div>
 
     <!-- Mobile Touch / Swipe Carousel -->
     <div class="ss-fp-carousel-wrap" id="ci360-fp-carousel-wrap">
       <div class="ss-fp-carousel-track" id="ci360-fp-track">
-        <?php foreach ( $final_projects as $idx => $slide ) : ?>
+        <?php foreach ( $all_slides as $idx => $slide ) : ?>
         <a href="<?php echo esc_url( $slide['url'] ); ?>" class="ss-fp-slide" style="background-image:url('<?php echo esc_url( $slide['image'] ); ?>');">
           <div class="ss-fp-slide-overlay"></div>
           <div class="ss-fp-slide-body">
@@ -570,7 +576,7 @@ $stacked_cards = array_slice( $final_projects, 1, 3 );
 
       <!-- Mobile Carousel Pagination Dots -->
       <div class="ss-fp-dots" id="ci360-fp-dots">
-        <?php foreach ( $final_projects as $idx => $slide ) : ?>
+        <?php foreach ( $all_slides as $idx => $slide ) : ?>
         <button class="ss-fp-dot <?php echo $idx === 0 ? 'active' : ''; ?>" aria-label="Slide <?php echo $idx + 1; ?>" onclick="ci360GoToFpSlide(<?php echo $idx; ?>)"></button>
         <?php endforeach; ?>
       </div>

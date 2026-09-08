@@ -1,7 +1,7 @@
 <?php
 /**
  * Custom Post Types (CPT), Taxonomies, ACF Field Groups & Meta Boxes
- * Includes Hero Settings, Case Studies Meta Box, and Featured Projects Section.
+ * Full Image Link and Media controls for Hero and Featured Projects.
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'init', 'ci360_register_custom_post_types_and_taxonomies' );
 
 function ci360_register_custom_post_types_and_taxonomies() {
-    // 1.1 Case Studies / Projects CPT
     $case_study_labels = array(
         'name'               => _x( 'Case Studies', 'post type general name', 'hello-elementor-child-ci360-acf' ),
         'singular_name'      => _x( 'Case Study', 'post type singular name', 'hello-elementor-child-ci360-acf' ),
@@ -50,7 +49,6 @@ function ci360_register_custom_post_types_and_taxonomies() {
         'show_in_rest'       => true,
     ) );
 
-    // 1.2 Case Study Categories / Sectors Taxonomy
     $cat_labels = array(
         'name'              => _x( 'Sectors / Categories', 'taxonomy general name', 'hello-elementor-child-ci360-acf' ),
         'singular_name'     => _x( 'Sector / Category', 'taxonomy singular name', 'hello-elementor-child-ci360-acf' ),
@@ -75,7 +73,7 @@ function ci360_register_custom_post_types_and_taxonomies() {
 }
 
 // =========================================================================
-// 2. REGISTER ACF OPTIONS PAGE ("Hero Settings")
+// 2. REGISTER ACF OPTIONS PAGE
 // =========================================================================
 add_action( 'acf/init', 'ci360_register_acf_options_page' );
 
@@ -94,7 +92,7 @@ function ci360_register_acf_options_page() {
 }
 
 // =========================================================================
-// 3. REGISTER ACF FIELD GROUPS (Hero, Showcase Videos, Featured Projects, CPT)
+// 3. REGISTER ACF FIELD GROUPS
 // =========================================================================
 add_action( 'acf/init', 'ci360_acf_register_all_local_fields' );
 
@@ -103,14 +101,11 @@ function ci360_acf_register_all_local_fields() {
         return;
     }
 
-    // -------------------------------------------------------------
-    // 3.1 HERO & THEME SETTINGS FIELD GROUP
-    // -------------------------------------------------------------
     $hero_fields = array(
-        // Tab 1: Headlines & Text
+        // Tab 1: Hero Headlines & Text
         array(
             'key' => 'field_tab_hero_text',
-            'label' => 'Headlines & Text',
+            'label' => 'Hero Headlines & Text',
             'type' => 'tab',
         ),
         array(
@@ -133,7 +128,6 @@ function ci360_acf_register_all_local_fields() {
             'name' => 'hero_title_highlight',
             'type' => 'text',
             'default_value' => 'Move Brands',
-            'instructions' => 'These words render in glowing cyan/blue gradient text.',
         ),
         array(
             'key' => 'field_hero_title_suffix',
@@ -151,10 +145,10 @@ function ci360_acf_register_all_local_fields() {
             'default_value' => 'CI360 Degrees is an integrated digital marketing and strategic communication agency helping businesses transform ideas into impactful brand experiences and measurable growth.',
         ),
 
-        // Tab 2: CTA Buttons
+        // Tab 2: Hero CTAs
         array(
             'key' => 'field_tab_hero_ctas',
-            'label' => 'Call To Action Buttons',
+            'label' => 'Hero Buttons',
             'type' => 'tab',
         ),
         array(
@@ -190,10 +184,10 @@ function ci360_acf_register_all_local_fields() {
             'wrapper' => array( 'width' => '50' ),
         ),
 
-        // Tab 3: Live Stats
+        // Tab 3: Hero Metrics
         array(
             'key' => 'field_tab_hero_stats',
-            'label' => 'Live Metrics & Badges',
+            'label' => 'Hero Metrics',
             'type' => 'tab',
         ),
         array(
@@ -264,64 +258,28 @@ function ci360_acf_register_all_local_fields() {
         // Tab 4: Right Showcase Slider (6 Videos)
         array(
             'key' => 'field_tab_hero_slides_video',
-            'label' => 'Right Showcase Slider (6 Videos)',
+            'label' => 'Hero Slider (6 Videos)',
             'type' => 'tab',
         ),
     );
 
     $default_slides = array(
-        1 => array(
-            'title' => 'Integrated Digital Ecosystems',
-            'tag'   => 'Brand Growth',
-            'desc'  => 'Unified multi-channel media architectures accelerating customer acquisition and retention.',
-            'video' => '',
-        ),
-        2 => array(
-            'title' => 'Station Satcom: B2B Satellite Telecom',
-            'tag'   => 'Satcom & Marine',
-            'desc'  => 'Global brand repositioning and Next.js portal for maritime, defense, and enterprise satellite connectivity.',
-            'video' => '',
-        ),
-        3 => array(
-            'title' => 'High-Performance Web & App UI/UX',
-            'tag'   => 'Digital Platforms',
-            'desc'  => 'Next-gen reactive web applications engineered for speed, conversion, and global accessibility.',
-            'video' => '',
-        ),
-        4 => array(
-            'title' => 'Performance Marketing & Lead Engines',
-            'tag'   => 'Demand Gen',
-            'desc'  => 'Data-backed paid performance marketing driving multi-crore qualified pipeline.',
-            'video' => '',
-        ),
-        5 => array(
-            'title' => 'Executive Visual Identity & 3D Media',
-            'tag'   => 'Visual Design',
-            'desc'  => 'Sensory 3D CGI visuals, motion typography, and executive identity systems.',
-            'video' => '',
-        ),
-        6 => array(
-            'title' => 'Production Studio & Content Engine',
-            'tag'   => 'Content Production',
-            'desc'  => 'In-house broadcast audio podcast suites, multi-cam capture, and transatlantic live bridges.',
-            'video' => '',
-        ),
+        1 => array( 'title' => 'Integrated Digital Ecosystems', 'tag' => 'Brand Growth', 'desc' => 'Unified multi-channel media architectures accelerating customer acquisition.', 'video' => '' ),
+        2 => array( 'title' => 'Station Satcom: B2B Satellite Telecom', 'tag' => 'Satcom & Marine', 'desc' => 'Global brand repositioning and Next.js portal for maritime connectivity.', 'video' => '' ),
+        3 => array( 'title' => 'High-Performance Web & App UI/UX', 'tag' => 'Digital Platforms', 'desc' => 'Next-gen reactive web applications engineered for speed and conversion.', 'video' => '' ),
+        4 => array( 'title' => 'Performance Marketing & Lead Engines', 'tag' => 'Demand Gen', 'desc' => 'Data-backed paid performance marketing driving multi-crore qualified pipeline.', 'video' => '' ),
+        5 => array( 'title' => 'Executive Visual Identity & 3D Media', 'tag' => 'Visual Design', 'desc' => 'Sensory 3D CGI visuals, motion typography, and executive identity systems.', 'video' => '' ),
+        6 => array( 'title' => 'Production Studio & Content Engine', 'tag' => 'Content Production', 'desc' => 'In-house broadcast audio podcast suites and multi-cam capture.', 'video' => '' ),
     );
 
     for ( $i = 1; $i <= 6; $i++ ) {
         $d = $default_slides[$i];
         $hero_fields[] = array(
-            'key' => 'field_slide' . $i . '_heading_msg',
-            'label' => '▶ Slide ' . $i . ' (' . $d['title'] . ')',
-            'type' => 'message',
-            'message' => 'Configure Video Link and details for Showcase Slide ' . $i,
-        );
-        $hero_fields[] = array(
             'key' => 'field_slide' . $i . '_video_link',
             'label' => 'Slide ' . $i . ' Video Link (Direct MP4 URL)',
             'name' => 'hero_slide' . $i . '_video_url',
             'type' => 'url',
-            'instructions' => 'Paste your direct MP4 video link here (e.g. https://.../video.mp4)',
+            'instructions' => 'Paste MP4 video URL for Slide ' . $i . ' (' . $d['title'] . ')',
             'default_value' => $d['video'],
         );
         $hero_fields[] = array(
@@ -350,10 +308,10 @@ function ci360_acf_register_all_local_fields() {
         );
     }
 
-    // Tab 5: Featured Projects Section Settings
+    // Tab 5: Featured Projects Section Cards & Image Links
     $hero_fields[] = array(
         'key' => 'field_tab_fp_settings',
-        'label' => 'Featured Projects Section',
+        'label' => 'Featured Projects Section (4 Cards)',
         'type' => 'tab',
     );
     $hero_fields[] = array(
@@ -397,6 +355,206 @@ function ci360_acf_register_all_local_fields() {
         'wrapper' => array( 'width' => '50' ),
     );
 
+    // Card 1: Left Big Featured Card
+    $hero_fields[] = array(
+        'key' => 'field_fp_c1_msg',
+        'label' => '🔲 Card 1: Main Left Featured Card (54% Width)',
+        'type' => 'message',
+        'message' => 'Configure the primary large showcased card on the left.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card1_image_url',
+        'label' => 'Card 1 Image Link (URL)',
+        'name' => 'fp_card1_image_url',
+        'type' => 'url',
+        'instructions' => 'Paste direct image URL from WordPress Media Library or external link.',
+        'default_value' => 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card1_video_url',
+        'label' => 'Card 1 Video Link (Optional MP4)',
+        'name' => 'fp_card1_video_url',
+        'type' => 'url',
+        'instructions' => 'Optional background MP4 video for Card 1.',
+        'default_value' => '',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card1_badge',
+        'label' => 'Card 1 Badge Text',
+        'name' => 'fp_card1_badge',
+        'type' => 'text',
+        'default_value' => 'Featured Project',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card1_cat',
+        'label' => 'Card 1 Category & Client',
+        'name' => 'fp_card1_cat',
+        'type' => 'text',
+        'default_value' => 'Reality • Client: Leoz',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card1_title',
+        'label' => 'Card 1 Title',
+        'name' => 'fp_card1_title',
+        'type' => 'text',
+        'default_value' => 'LEOZ: Art of Ambiance & Architectural Illumination',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card1_desc',
+        'label' => 'Card 1 Description',
+        'name' => 'fp_card1_desc',
+        'type' => 'textarea',
+        'rows' => 2,
+        'default_value' => 'Sensory ambient lighting catalogs, 3D architectural illumination renders, and high-end interior designer partnerships.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card1_url',
+        'label' => 'Card 1 Target Link',
+        'name' => 'fp_card1_url',
+        'type' => 'text',
+        'default_value' => '/case-studies/leoz/',
+    );
+
+    // Card 2: Right Top Card
+    $hero_fields[] = array(
+        'key' => 'field_fp_c2_msg',
+        'label' => '🔲 Card 2: Right Stacked Top Card',
+        'type' => 'message',
+        'message' => 'Configure the top card in the right column.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card2_image_url',
+        'label' => 'Card 2 Image Link (URL)',
+        'name' => 'fp_card2_image_url',
+        'type' => 'url',
+        'default_value' => 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=800&auto=format&fit=crop',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card2_cat',
+        'label' => 'Card 2 Category & Client',
+        'name' => 'fp_card2_cat',
+        'type' => 'text',
+        'default_value' => 'Public Policy • Client: Ananta Aspen Centre',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card2_title',
+        'label' => 'Card 2 Title',
+        'name' => 'fp_card2_title',
+        'type' => 'text',
+        'default_value' => 'Ananta Aspen Centre: High-Level Track-II Diplomacy & Leadership',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card2_desc',
+        'label' => 'Card 2 Description',
+        'name' => 'fp_card2_desc',
+        'type' => 'textarea',
+        'rows' => 2,
+        'default_value' => 'International bilateral summit digital stage graphics, track-two diplomacy identity, and policy research monographs.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card2_url',
+        'label' => 'Card 2 Target Link',
+        'name' => 'fp_card2_url',
+        'type' => 'text',
+        'default_value' => '/case-studies/ananta-centre-aspen/',
+    );
+
+    // Card 3: Right Middle Card
+    $hero_fields[] = array(
+        'key' => 'field_fp_c3_msg',
+        'label' => '🔲 Card 3: Right Stacked Middle Card',
+        'type' => 'message',
+        'message' => 'Configure the middle card in the right column.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card3_image_url',
+        'label' => 'Card 3 Image Link (URL)',
+        'name' => 'fp_card3_image_url',
+        'type' => 'url',
+        'default_value' => 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card3_cat',
+        'label' => 'Card 3 Category & Client',
+        'name' => 'fp_card3_cat',
+        'type' => 'text',
+        'default_value' => 'Education • Client: Chaitanya School Gandhinagar',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card3_title',
+        'label' => 'Card 3 Title',
+        'name' => 'fp_card3_title',
+        'type' => 'text',
+        'default_value' => 'Chaitanya School Gandhinagar: Academic Pedagogy & Campus Admissions',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card3_desc',
+        'label' => 'Card 3 Description',
+        'name' => 'fp_card3_desc',
+        'type' => 'textarea',
+        'rows' => 2,
+        'default_value' => 'Campus life documentary cinematography, value-based curriculum branding, and 100% capacity student admissions scaling.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card3_url',
+        'label' => 'Card 3 Target Link',
+        'name' => 'fp_card3_url',
+        'type' => 'text',
+        'default_value' => '/case-studies/chaitanya-school-gandhinagar/',
+    );
+
+    // Card 4: Right Bottom Card
+    $hero_fields[] = array(
+        'key' => 'field_fp_c4_msg',
+        'label' => '🔲 Card 4: Right Stacked Bottom Card',
+        'type' => 'message',
+        'message' => 'Configure the bottom card in the right column.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card4_image_url',
+        'label' => 'Card 4 Image Link (URL)',
+        'name' => 'fp_card4_image_url',
+        'type' => 'url',
+        'default_value' => 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card4_cat',
+        'label' => 'Card 4 Category & Client',
+        'name' => 'fp_card4_cat',
+        'type' => 'text',
+        'default_value' => 'Satcom • Client: Station Satcom',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card4_title',
+        'label' => 'Card 4 Title',
+        'name' => 'fp_card4_title',
+        'type' => 'text',
+        'default_value' => 'Station Satcom: B2B Satellite Telecom Modernization',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card4_desc',
+        'label' => 'Card 4 Description',
+        'name' => 'fp_card4_desc',
+        'type' => 'textarea',
+        'rows' => 2,
+        'default_value' => 'Global brand repositioning and Next.js portal for maritime, defense, and enterprise satellite connectivity.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_card4_url',
+        'label' => 'Card 4 Target Link',
+        'name' => 'fp_card4_url',
+        'type' => 'text',
+        'default_value' => '/case-studies/station-satcom/',
+    );
+
     acf_add_local_field_group( array(
         'key' => 'group_ci360_hero_settings',
         'title' => 'CI360: Theme & Homepage Section Settings',
@@ -438,9 +596,23 @@ function ci360_acf_register_all_local_fields() {
                 'label' => '⭐ Feature as Primary Big Card',
                 'name' => 'is_featured_project',
                 'type' => 'true_false',
-                'instructions' => 'Enable this to display this case study as the main left 54% featured card on the homepage.',
+                'instructions' => 'Enable to display this case study as the main left 54% featured card on homepage.',
                 'ui' => 1,
                 'default_value' => 0,
+            ),
+            array(
+                'key' => 'field_cs_image_url',
+                'label' => 'Project Image Link (URL)',
+                'name' => 'project_image_url',
+                'type' => 'url',
+                'instructions' => 'Paste direct image URL (e.g. from Media Library). Overrides featured image if set.',
+            ),
+            array(
+                'key' => 'field_cs_video_url',
+                'label' => 'Direct Video Link (Optional MP4)',
+                'name' => 'project_video_url',
+                'type' => 'url',
+                'instructions' => 'Direct link to an MP4 video (optional background preview).',
             ),
             array(
                 'key' => 'field_cs_client_name',
@@ -467,52 +639,11 @@ function ci360_acf_register_all_local_fields() {
                 'instructions' => 'Short 2-line summary shown on the project card.',
             ),
             array(
-                'key' => 'field_cs_video_url',
-                'label' => 'Direct Video Link (Optional MP4)',
-                'name' => 'project_video_url',
-                'type' => 'url',
-                'instructions' => 'Direct link to an MP4 video (optional background preview).',
-                'wrapper' => array( 'width' => '50' ),
-            ),
-            array(
                 'key' => 'field_cs_custom_url',
                 'label' => 'Custom Target URL (Optional)',
                 'name' => 'custom_case_study_url',
                 'type' => 'url',
                 'instructions' => 'Leave blank to link to standard case study single post URL.',
-                'wrapper' => array( 'width' => '50' ),
-            ),
-            array(
-                'key' => 'field_cs_metric1_val',
-                'label' => 'Key Metric 1 Value',
-                'name' => 'stat1_value',
-                'type' => 'text',
-                'instructions' => 'e.g. +340%',
-                'wrapper' => array( 'width' => '25' ),
-            ),
-            array(
-                'key' => 'field_cs_metric1_lbl',
-                'label' => 'Key Metric 1 Label',
-                'name' => 'stat1_label',
-                'type' => 'text',
-                'instructions' => 'e.g. Pipeline Velocity',
-                'wrapper' => array( 'width' => '25' ),
-            ),
-            array(
-                'key' => 'field_cs_metric2_val',
-                'label' => 'Key Metric 2 Value',
-                'name' => 'stat2_value',
-                'type' => 'text',
-                'instructions' => 'e.g. 98.4%',
-                'wrapper' => array( 'width' => '25' ),
-            ),
-            array(
-                'key' => 'field_cs_metric2_lbl',
-                'label' => 'Key Metric 2 Label',
-                'name' => 'stat2_label',
-                'type' => 'text',
-                'instructions' => 'e.g. Client Retention',
-                'wrapper' => array( 'width' => '25' ),
             ),
         ),
         'location' => array(
@@ -532,7 +663,6 @@ function ci360_acf_register_all_local_fields() {
 
 // =========================================================================
 // 4. NATIVE WORDPRESS FALLBACK METABOX FOR CASE STUDIES
-// (Ensures fields work even if ACF plugin is deactivated)
 // =========================================================================
 add_action( 'add_meta_boxes', 'ci360_register_native_case_study_metabox' );
 add_action( 'save_post_case_study', 'ci360_save_native_case_study_metabox' );
@@ -551,14 +681,13 @@ function ci360_register_native_case_study_metabox() {
 function ci360_render_native_case_study_metabox( $post ) {
     wp_nonce_field( 'ci360_case_study_nonce_action', 'ci360_case_study_nonce' );
 
+    $image_url      = get_post_meta( $post->ID, 'project_image_url', true );
+    $video_url      = get_post_meta( $post->ID, 'project_video_url', true );
     $client_name    = get_post_meta( $post->ID, 'client_name', true );
     $card_tagline   = get_post_meta( $post->ID, 'card_tagline', true );
     $card_summary   = get_post_meta( $post->ID, 'card_summary', true );
-    $video_url      = get_post_meta( $post->ID, 'project_video_url', true );
     $custom_url     = get_post_meta( $post->ID, 'custom_case_study_url', true );
     $is_featured    = get_post_meta( $post->ID, 'is_featured_project', true );
-    $stat1_val      = get_post_meta( $post->ID, 'stat1_value', true );
-    $stat1_lbl      = get_post_meta( $post->ID, 'stat1_label', true );
     ?>
     <style>
         .ci360-mb-row { margin-bottom: 15px; }
@@ -573,6 +702,20 @@ function ci360_render_native_case_study_metabox( $post ) {
                 <input type="checkbox" name="is_featured_project" value="1" <?php checked( $is_featured, '1' ); ?>>
                 <strong>⭐ Feature as Primary Big Card on Homepage</strong>
             </label>
+        </div>
+        <div class="ci360-mb-grid">
+            <div class="ci360-mb-col">
+                <div class="ci360-mb-row">
+                    <label for="project_image_url">Project Image Link (URL):</label>
+                    <input type="url" id="project_image_url" name="project_image_url" value="<?php echo esc_url( $image_url ); ?>" placeholder="https://.../image.jpg">
+                </div>
+            </div>
+            <div class="ci360-mb-col">
+                <div class="ci360-mb-row">
+                    <label for="project_video_url">Direct Video Link (MP4 URL):</label>
+                    <input type="url" id="project_video_url" name="project_video_url" value="<?php echo esc_url( $video_url ); ?>" placeholder="https://.../video.mp4">
+                </div>
+            </div>
         </div>
         <div class="ci360-mb-grid">
             <div class="ci360-mb-col">
@@ -592,33 +735,9 @@ function ci360_render_native_case_study_metabox( $post ) {
             <label for="card_summary">Card Short Summary:</label>
             <textarea id="card_summary" name="card_summary" rows="3" placeholder="Brief 2-line summary..."><?php echo esc_textarea( $card_summary ); ?></textarea>
         </div>
-        <div class="ci360-mb-grid">
-            <div class="ci360-mb-col">
-                <div class="ci360-mb-row">
-                    <label for="project_video_url">Direct Video Link (MP4 URL):</label>
-                    <input type="url" id="project_video_url" name="project_video_url" value="<?php echo esc_url( $video_url ); ?>" placeholder="https://.../video.mp4">
-                </div>
-            </div>
-            <div class="ci360-mb-col">
-                <div class="ci360-mb-row">
-                    <label for="custom_case_study_url">Custom Target URL (Optional):</label>
-                    <input type="url" id="custom_case_study_url" name="custom_case_study_url" value="<?php echo esc_url( $custom_url ); ?>" placeholder="https://...">
-                </div>
-            </div>
-        </div>
-        <div class="ci360-mb-grid">
-            <div class="ci360-mb-col">
-                <div class="ci360-mb-row">
-                    <label for="stat1_value">Key Impact Stat Value:</label>
-                    <input type="text" id="stat1_value" name="stat1_value" value="<?php echo esc_attr( $stat1_val ); ?>" placeholder="e.g. +340% ROI">
-                </div>
-            </div>
-            <div class="ci360-mb-col">
-                <div class="ci360-mb-row">
-                    <label for="stat1_label">Key Impact Stat Label:</label>
-                    <input type="text" id="stat1_label" name="stat1_label" value="<?php echo esc_attr( $stat1_lbl ); ?>" placeholder="e.g. Revenue Growth">
-                </div>
-            </div>
+        <div class="ci360-mb-row">
+            <label for="custom_case_study_url">Custom Target URL (Optional):</label>
+            <input type="url" id="custom_case_study_url" name="custom_case_study_url" value="<?php echo esc_url( $custom_url ); ?>" placeholder="https://...">
         </div>
     </div>
     <?php
@@ -635,7 +754,7 @@ function ci360_save_native_case_study_metabox( $post_id ) {
         return;
     }
 
-    $fields = array( 'client_name', 'card_tagline', 'card_summary', 'project_video_url', 'custom_case_study_url', 'stat1_value', 'stat1_label' );
+    $fields = array( 'project_image_url', 'project_video_url', 'client_name', 'card_tagline', 'card_summary', 'custom_case_study_url' );
     foreach ( $fields as $field ) {
         if ( isset( $_POST[$field] ) ) {
             update_post_meta( $post_id, $field, sanitize_text_field( $_POST[$field] ) );
