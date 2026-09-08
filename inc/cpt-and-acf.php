@@ -594,6 +594,230 @@ function ci360_acf_register_all_local_fields() {
         'wrapper' => array( 'width' => '50' ),
     );
 
+    
+    // Tab 6: Foundational Pillars (Vision, Mission, Values)
+    $hero_fields[] = array(
+        'key' => 'field_tab_pillars_settings',
+        'label' => 'Foundational Pillars (Vision, Mission, Values)',
+        'type' => 'tab',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_pillars_badge_text',
+        'label' => 'Pillars Top Badge',
+        'name' => 'pillars_badge_text',
+        'type' => 'text',
+        'default_value' => 'Foundational Pillars',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_pillars_title_text',
+        'label' => 'Pillars Section Title',
+        'name' => 'pillars_title_text',
+        'type' => 'text',
+        'default_value' => 'Vision. Mission. Values.',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_pillars_description',
+        'label' => 'Pillars Subtitle / Description',
+        'name' => 'pillars_description',
+        'type' => 'textarea',
+        'rows' => 2,
+        'default_value' => 'The foundational compass guiding our culture, client partnerships, and creative rigor.',
+    );
+
+    // Pillar 1: Vision
+    $hero_fields[] = array(
+        'key' => 'field_p1_msg',
+        'label' => '👁️ Pillar 01: Vision',
+        'type' => 'message',
+        'message' => 'Configure Vision Pillar Card.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p1_tag',
+        'label' => 'Pillar 1 Badge',
+        'name' => 'p1_tag',
+        'type' => 'text',
+        'default_value' => 'Pillar 01',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p1_title',
+        'label' => 'Pillar 1 Title',
+        'name' => 'p1_title',
+        'type' => 'text',
+        'default_value' => 'Our Vision',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p1_subtitle',
+        'label' => 'Pillar 1 Tagline',
+        'name' => 'p1_subtitle',
+        'type' => 'text',
+        'default_value' => 'Architecting Tomorrow\'s Brand Ecosystems',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p1_desc',
+        'label' => 'Pillar 1 Description',
+        'name' => 'p1_description',
+        'type' => 'textarea',
+        'rows' => 3,
+        'default_value' => 'To be the premier global catalyst where visionary thinking, generative intelligence, and sensory storytelling converge to redefine how enterprises connect with humanity.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p1_b1',
+        'label' => 'Pillar 1 Bullet 1',
+        'name' => 'p1_bullet1',
+        'type' => 'text',
+        'default_value' => 'Continuous technological evolution',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p1_b2',
+        'label' => 'Pillar 1 Bullet 2',
+        'name' => 'p1_bullet2',
+        'type' => 'text',
+        'default_value' => 'Cross-border enterprise scale & reach',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p1_b3',
+        'label' => 'Pillar 1 Bullet 3',
+        'name' => 'p1_bullet3',
+        'type' => 'text',
+        'default_value' => 'Zero-compromise aesthetic excellence',
+        'wrapper' => array( 'width' => '33' ),
+    );
+
+    // Pillar 2: Mission
+    $hero_fields[] = array(
+        'key' => 'field_p2_msg',
+        'label' => '🚀 Pillar 02: Mission',
+        'type' => 'message',
+        'message' => 'Configure Mission Pillar Card.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p2_tag',
+        'label' => 'Pillar 2 Badge',
+        'name' => 'p2_tag',
+        'type' => 'text',
+        'default_value' => 'Pillar 02',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p2_title',
+        'label' => 'Pillar 2 Title',
+        'name' => 'p2_title',
+        'type' => 'text',
+        'default_value' => 'Our Mission',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p2_subtitle',
+        'label' => 'Pillar 2 Tagline',
+        'name' => 'p2_subtitle',
+        'type' => 'text',
+        'default_value' => 'Engineering Measurable Growth & Impact',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p2_desc',
+        'label' => 'Pillar 2 Description',
+        'name' => 'p2_description',
+        'type' => 'textarea',
+        'rows' => 3,
+        'default_value' => 'Empower transformative brands through precision digital infrastructure, multi-channel marketing velocity, and bespoke brand narratives that convert complexity into clear competitive advantage.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p2_b1',
+        'label' => 'Pillar 2 Bullet 1',
+        'name' => 'p2_bullet1',
+        'type' => 'text',
+        'default_value' => 'Data-backed performance engines',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p2_b2',
+        'label' => 'Pillar 2 Bullet 2',
+        'name' => 'p2_bullet2',
+        'type' => 'text',
+        'default_value' => 'Seamless full-stack digital integration',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p2_b3',
+        'label' => 'Pillar 2 Bullet 3',
+        'name' => 'p2_bullet3',
+        'type' => 'text',
+        'default_value' => 'High-velocity, transparent delivery',
+        'wrapper' => array( 'width' => '33' ),
+    );
+
+    // Pillar 3: Values
+    $hero_fields[] = array(
+        'key' => 'field_p3_msg',
+        'label' => '💎 Pillar 03: Values',
+        'type' => 'message',
+        'message' => 'Configure Core Values Pillar Card.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p3_tag',
+        'label' => 'Pillar 3 Badge',
+        'name' => 'p3_tag',
+        'type' => 'text',
+        'default_value' => 'Pillar 03',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p3_title',
+        'label' => 'Pillar 3 Title',
+        'name' => 'p3_title',
+        'type' => 'text',
+        'default_value' => 'Core Values',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p3_subtitle',
+        'label' => 'Pillar 3 Tagline',
+        'name' => 'p3_subtitle',
+        'type' => 'text',
+        'default_value' => 'Uncompromising Rigor & Authenticity',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p3_desc',
+        'label' => 'Pillar 3 Description',
+        'name' => 'p3_description',
+        'type' => 'textarea',
+        'rows' => 3,
+        'default_value' => 'Our work is anchored in deep integrity, relentless craft perfection, radical empathy for user experiences, and enduring long-term client partnership stewardship.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p3_b1',
+        'label' => 'Pillar 3 Bullet 1',
+        'name' => 'p3_bullet1',
+        'type' => 'text',
+        'default_value' => 'Obsessive craft & typographic rigor',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p3_b2',
+        'label' => 'Pillar 3 Bullet 2',
+        'name' => 'p3_bullet2',
+        'type' => 'text',
+        'default_value' => 'Radical transparency & complete ownership',
+        'wrapper' => array( 'width' => '33' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_p3_b3',
+        'label' => 'Pillar 3 Bullet 3',
+        'name' => 'p3_bullet3',
+        'type' => 'text',
+        'default_value' => 'Scalable client-first collaboration',
+        'wrapper' => array( 'width' => '33' ),
+    );
+
     acf_add_local_field_group( array(
         'key' => 'group_ci360_hero_settings',
         'title' => 'CI360: Theme & Homepage Section Settings',

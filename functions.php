@@ -37,3 +37,12 @@ function ci360_acf_render_featured_projects_shortcode( $atts ) {
     get_template_part( 'template-parts/featured-projects-acf' );
     return ob_get_clean();
 }
+
+// 5. Register [ci360_foundational_pillars] Shortcode for Elementor
+add_shortcode( 'ci360_foundational_pillars', 'ci360_acf_render_foundational_pillars_shortcode' );
+
+function ci360_acf_render_foundational_pillars_shortcode( $atts ) {
+    ob_start();
+    get_template_part( 'template-parts/foundational-pillars-acf' );
+    return ob_get_clean();
+}

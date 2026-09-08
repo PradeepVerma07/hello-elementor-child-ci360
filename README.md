@@ -65,3 +65,9 @@ You can place the sections anywhere on your pages using Elementor's **Shortcode*
   ```
   *Automatically queries published `case_study` CPT posts and `case_study_category` terms, with graceful fallbacks.*
 
+- **Dynamic Foundational Pillars Section (Vision, Mission, Values)**:
+  ```text
+  [ci360_foundational_pillars]
+  ```
+  *Presents your Vision, Mission, and Core Values with interactive cards, custom badges, and live bullet points.*
+
