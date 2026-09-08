@@ -127,10 +127,13 @@ if ( $active_cat_id > 0 ) {
 $blog_query = new WP_Query( $query_args );
 
 // Helper for reading time
-function ci360_calc_reading_time( $content ) {
+if ( ! function_exists( 'ci360_calc_reading_time' ) ) {
+    function ci360_calc_reading_time( $content ) {
     $word_count = str_word_count( strip_tags( $content ) );
     $reading_time = ceil( $word_count / 200 );
     return max( 1, $reading_time );
+}
+
 }
 ?>
 
@@ -386,7 +389,7 @@ function ci360_calc_reading_time( $content ) {
     <?php if ( ! empty( $available_categories ) && ! is_wp_error( $available_categories ) ) : ?>
     <div class="flex flex-wrap items-center justify-center gap-2.5 mb-14">
       <?php 
-      $current_page_url = strtok( $_SERVER["REQUEST_URI"], '?' );
+      $current_page_url = ! empty( $_SERVER["REQUEST_URI"] ) ? ( ! empty( $_SERVER["REQUEST_URI"] ) ? strtok( $_SERVER["REQUEST_URI"], '?' ) : get_permalink() ) : get_permalink();
       $all_active = empty( $active_cat_slug ) ? 'active' : '';
       ?>
       <a href="<?php echo esc_url( $current_page_url ); ?>" class="cat-filter-btn <?php echo $all_active; ?>">
