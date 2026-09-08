@@ -1,7 +1,7 @@
 <?php
 /**
  * Dynamic ACF Featured Projects / Case Studies Section
- * Pulls image links, video links and content directly from ACF Theme Settings or CPT.
+ * Complete with Bottom Insights Callout Banner & Custom Meta Controls.
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -26,14 +26,20 @@ if ( ! function_exists( 'ci360_get_fp_val' ) ) {
     }
 }
 
-// 1. Section Headings & Text from ACF
+// 1. Top Section Headings & Text
 $fp_badge_text    = ci360_get_fp_val( 'fp_badge_text', 'Case Studies' );
 $fp_title_main    = ci360_get_fp_val( 'fp_title_main', 'Featured Projects' );
 $fp_description   = ci360_get_fp_val( 'fp_description', 'Transforming ambitious brands into category leaders with data-driven strategy and precision design.' );
 $fp_view_all_text = ci360_get_fp_val( 'fp_view_all_text', 'View All Projects' );
 $fp_view_all_url  = ci360_get_fp_val( 'fp_view_all_url', home_url( '/case-studies/' ) );
 
-// 2. Card 1 (Main Left 54% Featured Card)
+// 2. Bottom Callout Banner
+$fp_bottom_title    = ci360_get_fp_val( 'fp_bottom_title', 'Stay informed. Stay ahead.' );
+$fp_bottom_subtitle = ci360_get_fp_val( 'fp_bottom_subtitle', 'Curated insights and expert analysis to help you navigate change and lead with confidence.' );
+$fp_bottom_btn_text = ci360_get_fp_val( 'fp_bottom_btn_text', 'Check All Case Studies' );
+$fp_bottom_btn_url  = ci360_get_fp_val( 'fp_bottom_btn_url', home_url( '/case-studies/' ) );
+
+// 3. Card 1 (Main Left 54% Featured Card)
 $card1_img   = ci360_get_fp_val( 'fp_card1_image_url', 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop' );
 $card1_video = ci360_get_fp_val( 'fp_card1_video_url', '' );
 $card1_badge = ci360_get_fp_val( 'fp_card1_badge', 'Featured Project' );
@@ -42,28 +48,28 @@ $card1_title = ci360_get_fp_val( 'fp_card1_title', 'LEOZ: Art of Ambiance & Arch
 $card1_desc  = ci360_get_fp_val( 'fp_card1_desc', 'Sensory ambient lighting catalogs, 3D architectural illumination renders, and high-end interior designer partnerships.' );
 $card1_url   = ci360_get_fp_val( 'fp_card1_url', home_url( '/case-studies/leoz/' ) );
 
-// 3. Card 2 (Right Top Card)
+// 4. Card 2 (Right Top Card)
 $card2_img   = ci360_get_fp_val( 'fp_card2_image_url', 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=800&auto=format&fit=crop' );
 $card2_cat   = ci360_get_fp_val( 'fp_card2_cat', 'Public Policy • Client: Ananta Aspen Centre' );
 $card2_title = ci360_get_fp_val( 'fp_card2_title', 'Ananta Aspen Centre: High-Level Track-II Diplomacy & Leadership' );
 $card2_desc  = ci360_get_fp_val( 'fp_card2_desc', 'International bilateral summit digital stage graphics, track-two diplomacy identity, and policy research monographs.' );
 $card2_url   = ci360_get_fp_val( 'fp_card2_url', home_url( '/case-studies/ananta-centre-aspen/' ) );
 
-// 4. Card 3 (Right Middle Card)
+// 5. Card 3 (Right Middle Card)
 $card3_img   = ci360_get_fp_val( 'fp_card3_image_url', 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop' );
 $card3_cat   = ci360_get_fp_val( 'fp_card3_cat', 'Education • Client: Chaitanya School Gandhinagar' );
 $card3_title = ci360_get_fp_val( 'fp_card3_title', 'Chaitanya School Gandhinagar: Academic Pedagogy & Campus Admissions' );
 $card3_desc  = ci360_get_fp_val( 'fp_card3_desc', 'Campus life documentary cinematography, value-based curriculum branding, and 100% capacity student admissions scaling.' );
 $card3_url   = ci360_get_fp_val( 'fp_card3_url', home_url( '/case-studies/chaitanya-school-gandhinagar/' ) );
 
-// 5. Card 4 (Right Bottom Card)
+// 6. Card 4 (Right Bottom Card)
 $card4_img   = ci360_get_fp_val( 'fp_card4_image_url', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop' );
 $card4_cat   = ci360_get_fp_val( 'fp_card4_cat', 'Satcom • Client: Station Satcom' );
 $card4_title = ci360_get_fp_val( 'fp_card4_title', 'Station Satcom: B2B Satellite Telecom Modernization' );
 $card4_desc  = ci360_get_fp_val( 'fp_card4_desc', 'Global brand repositioning and Next.js portal for maritime, defense, and enterprise satellite connectivity.' );
 $card4_url   = ci360_get_fp_val( 'fp_card4_url', home_url( '/case-studies/station-satcom/' ) );
 
-// 6. Check if CPT posts exist to optionally populate cards
+// 7. Check if CPT posts exist to optionally populate cards
 $cs_query = new WP_Query( array(
     'post_type'      => 'case_study',
     'posts_per_page' => 4,
@@ -281,7 +287,6 @@ $all_slides = array(
     letter-spacing: 0.08em !important;
 }
 
-/* Heading color remains solid white on hover */
 #ci360-featured-projects-section .ss-fp-featured-title {
     font-size: 26px !important;
     font-weight: 800 !important;
@@ -384,6 +389,29 @@ $all_slides = array(
     line-height: 1.55 !important;
     margin: 0 !important;
     font-weight: 300 !important;
+}
+
+/* Call to Action Button */
+#ci360-featured-projects-section .ss-fp-cta-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 13px 30px !important;
+    border-radius: 50px !important;
+    background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
+    color: #ffffff !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 8px 24px rgba(6, 182, 212, 0.3) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease !important;
+}
+
+#ci360-featured-projects-section .ss-fp-cta-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px rgba(6, 182, 212, 0.45) !important;
+    opacity: 0.95 !important;
 }
 
 /* Mobile Carousel */
@@ -581,6 +609,34 @@ $all_slides = array(
         <?php endforeach; ?>
       </div>
     </div>
+
+    <!-- Bottom Insights Callout Bar -->
+    <div class="mt-12 pt-7 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-5">
+        <div class="w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </div>
+        <div class="text-xs font-bold uppercase tracking-wider leading-tight text-white whitespace-nowrap">
+          <?php echo nl2br( esc_html( $fp_bottom_title ) ); ?>
+        </div>
+        <div class="hidden sm:block h-9 w-px bg-slate-700/80 mx-1"></div>
+        <p class="text-xs md:text-sm font-light text-slate-300 leading-relaxed max-w-xl">
+          <?php echo esc_html( $fp_bottom_subtitle ); ?>
+        </p>
+      </div>
+      <a href="<?php echo esc_url( $fp_bottom_btn_url ); ?>" class="ss-fp-cta-btn shrink-0">
+        <?php echo esc_html( $fp_bottom_btn_text ); ?>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"></path>
+          <path d="m12 5 7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+
   </div>
 </section>
 

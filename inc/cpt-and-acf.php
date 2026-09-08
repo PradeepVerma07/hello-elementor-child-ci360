@@ -554,6 +554,45 @@ function ci360_acf_register_all_local_fields() {
         'type' => 'text',
         'default_value' => '/case-studies/station-satcom/',
     );
+    // Bottom Callout Bar Settings
+    $hero_fields[] = array(
+        'key' => 'field_fp_bottom_msg',
+        'label' => '🌐 Bottom Callout & CTA Bar',
+        'type' => 'message',
+        'message' => 'Configure the bottom insights banner and action button.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_bottom_title',
+        'label' => 'Bottom Banner Tagline',
+        'name' => 'fp_bottom_title',
+        'type' => 'text',
+        'default_value' => 'Stay informed. Stay ahead.',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_bottom_subtitle',
+        'label' => 'Bottom Banner Subtitle',
+        'name' => 'fp_bottom_subtitle',
+        'type' => 'textarea',
+        'rows' => 2,
+        'default_value' => 'Curated insights and expert analysis to help you navigate change and lead with confidence.',
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_bottom_btn_text',
+        'label' => 'Bottom Button Text',
+        'name' => 'fp_bottom_btn_text',
+        'type' => 'text',
+        'default_value' => 'Check All Case Studies',
+        'wrapper' => array( 'width' => '50' ),
+    );
+    $hero_fields[] = array(
+        'key' => 'field_fp_bottom_btn_url',
+        'label' => 'Bottom Button Link',
+        'name' => 'fp_bottom_btn_url',
+        'type' => 'text',
+        'default_value' => '/case-studies/',
+        'wrapper' => array( 'width' => '50' ),
+    );
 
     acf_add_local_field_group( array(
         'key' => 'group_ci360_hero_settings',
