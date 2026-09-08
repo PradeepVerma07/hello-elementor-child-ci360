@@ -1,16 +1,25 @@
 # Hello Elementor Child - CI360 ACF Theme
 
-A lightweight, high-performance **Hello Elementor Child Theme** for **CI360 Degrees** with dynamic **Advanced Custom Fields (ACF)** support for the Home Hero section.
+A lightweight, high-performance **Hello Elementor Child Theme** for **CI360 Degrees** with built-in **Custom Post Types (CPT)**, **Taxonomies**, and dynamic **Advanced Custom Fields (ACF)** controls.
 
 ---
 
-## 🚀 Features
+## 🚀 What's Included
 
-- **100% Dynamic ACF Controls**: Full WordPress admin control for headlines, badges, description, CTA buttons, metrics, and right showcase slider.
-- **Built-in Fallbacks**: Gracefully falls back to default CI360 styles and content if ACF is inactive or fields are blank.
-- **Video & Image Slider**: Auto-sliding right showcase card with direct MP4 video support and slide counter.
-- **Electric Cyan & Blue Aesthetic**: Sleek glassmorphic dark theme (`#020617`), zero pink accents.
-- **Elementor Shortcode Ready**: Use `[ci360_home_hero]` anywhere in Elementor with instant preview.
+### 1. Dedicated Custom Post Type (CPT) & Taxonomies
+- **Case Studies CPT** (`case_study`): Manage all projects & client case studies directly from the WordPress Admin sidebar.
+- **Sectors & Domains Taxonomy** (`case_study_category`): Categorize case studies into domains (e.g. *Reality, Satcom, Education, FMCG, Media*).
+- **REST API Enabled**: Fully compatible with `/wp-json/wp/v2/case-studies` for headless or dynamic front-end widgets.
+
+### 2. Dedicated ACF Options Page
+- **Hero Settings** (`ci360-hero-settings`): A dedicated menu item in the WordPress Admin sidebar allowing you to update the Hero section without needing to open a page editor.
+
+### 3. Dynamic ACF Hero Section
+- **Headlines & Text**: `hero_badge_text`, `hero_title_prefix`, `hero_title_highlight`, `hero_title_suffix`, `hero_description`
+- **CTA Buttons**: `hero_btn1_text`, `hero_btn1_url`, `hero_btn2_text`, `hero_btn2_url`
+- **Live Metrics Repeater**: `hero_stats_repeater` (`stat_value`, `stat_label`, `stat_color`)
+- **Showcase Slides Repeater**: `hero_slides_repeater` (`slide_title`, `slide_tag`, `slide_description`, `slide_image`, `slide_video_url`)
+- **Case Study Single Details**: `client_name`, `card_summary`, `impact_metrics`
 
 ---
 
@@ -19,12 +28,12 @@ A lightweight, high-performance **Hello Elementor Child Theme** for **CI360 Degr
 ```
 hello-elementor-child-ci360-acf/
 ├── style.css                      # Child theme header & styles
-├── functions.php                  # Enqueues, registers shortcodes & ACF fields
+├── functions.php                  # Enqueues, registers shortcodes & CPT/ACF
 ├── template-home-acf.php          # Page Template: "Home Page (ACF Hero)"
 ├── template-parts/
 │   └── home-hero-acf.php          # Dynamic ACF Hero Section template
 ├── inc/
-│   └── acf-fields.php             # Auto-registers tabbed ACF Field Group in WP Admin
+│   └── cpt-and-acf.php            # CPTs, Taxonomies, Options Page & Local ACF Groups
 └── README.md                      # Documentation
 ```
 
@@ -33,35 +42,17 @@ hello-elementor-child-ci360-acf/
 ## 🛠️ How to Use
 
 ### 1. Installation
-1. Download or clone this repository.
-2. In WordPress Admin, go to **Appearance > Themes > Add New > Upload Theme**.
-3. Upload the theme folder/zip and activate it.
+1. In WordPress Admin, go to **Appearance > Themes > Add New > Upload Theme**.
+2. Upload and activate **Hello Elementor Child - CI360 ACF**.
+3. Ensure the **Advanced Custom Fields (ACF)** plugin is activated.
 
-### 2. Using in Elementor
-1. Open any page in Elementor.
-2. Drag a **Shortcode** widget into the section.
-3. Enter:
-   ```
-   [ci360_home_hero]
-   ```
+### 2. Updating Hero Content
+- Go to **Hero Settings** in the WordPress admin menu bar, or edit the **Front Page**.
+- Fill in your custom headlines, buttons, metrics, or showcase slides.
+- Click **Update**.
 
-### 3. Using as a Page Template
-When editing the Home Page, select Template: **Home Page (ACF Hero)** under Page Attributes.
-
----
-
-## ⚙️ ACF Fields Reference
-
-When editing the Front Page in WordPress Admin, the **"Home Page: Hero Section Settings"** metabox provides:
-
-| Tab | Fields | Description |
-| :--- | :--- | :--- |
-| **Headlines & Text** | `hero_badge_text`, `hero_title_prefix`, `hero_title_highlight`, `hero_title_suffix`, `hero_description` | Badge text, 3-part headline with gradient words, and intro description |
-| **CTA Buttons** | `hero_btn1_text`, `hero_btn1_url`, `hero_btn2_text`, `hero_btn2_url` | Primary & Secondary button labels and links |
-| **Key Metrics** | `hero_stats_repeater` (`stat_value`, `stat_label`, `stat_color`) | 4 live metric stat cards |
-| **Showcase Slider** | `hero_slides_repeater` (`slide_title`, `slide_tag`, `slide_description`, `slide_image`, `slide_video_url`) | Right showcase cards with optional MP4 video |
-
----
-
-## 📄 License
-GPL v2 or later.
+### 3. Using in Elementor
+Drag an Elementor **Shortcode** widget and enter:
+```
+[ci360_home_hero]
+```

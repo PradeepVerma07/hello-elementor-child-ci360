@@ -1,6 +1,10 @@
 <?php
 /**
  * Dynamic ACF Home Hero Section
+ * Looks up fields from:
+ * 1. Current Page fields (get_field)
+ * 2. ACF Options Page (get_field(..., 'option'))
+ * 3. Default high-end CI360 fallbacks
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -9,13 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Helper function for ACF value or fallback
-if ( ! function_exists( 'ci360_acf_val' ) ) {
-    function ci360_acf_val( $field_name, $default = '' ) {
+if ( ! function_exists( 'ci360_get_dynamic_hero_val' ) ) {
+    function ci360_get_dynamic_hero_val( $field_name, $default = '' ) {
         if ( function_exists( 'get_field' ) ) {
+            // 1. Check current page
             $val = get_field( $field_name );
             if ( ! empty( $val ) ) {
                 return $val;
+            }
+            // 2. Check options page
+            $opt_val = get_field( $field_name, 'option' );
+            if ( ! empty( $opt_val ) ) {
+                return $opt_val;
             }
         }
         return $default;
@@ -23,28 +32,40 @@ if ( ! function_exists( 'ci360_acf_val' ) ) {
 }
 
 // 1. Text & Headings
-$hero_badge       = ci360_acf_val( 'hero_badge_text', 'One Integrated Partner. Every Marketing Possibility.' );
-$hero_title_pre   = ci360_acf_val( 'hero_title_prefix', 'Stories That' );
-$hero_title_high  = ci360_acf_val( 'hero_title_highlight', 'Move Brands' );
-$hero_title_post  = ci360_acf_val( 'hero_title_suffix', 'Forward.' );
-$hero_desc        = ci360_acf_val( 'hero_description', 'CI360 Degrees is an integrated digital marketing and strategic communication agency helping businesses transform ideas into impactful brand experiences and measurable growth.' );
+$hero_badge       = ci360_get_dynamic_hero_val( 'hero_badge_text', 'One Integrated Partner. Every Marketing Possibility.' );
+$hero_title_pre   = ci360_get_dynamic_hero_val( 'hero_title_prefix', 'Stories That' );
+$hero_title_high  = ci360_get_dynamic_hero_val( 'hero_title_highlight', 'Move Brands' );
+$hero_title_post  = ci360_get_dynamic_hero_val( 'hero_title_suffix', 'Forward.' );
+$hero_desc        = ci360_get_dynamic_hero_val( 'hero_description', 'CI360 Degrees is an integrated digital marketing and strategic communication agency helping businesses transform ideas into impactful brand experiences and measurable growth.' );
 
 // 2. CTA Buttons
-$hero_btn1_text   = ci360_acf_val( 'hero_btn1_text', 'Start a Conversation' );
-$hero_btn1_url    = ci360_acf_val( 'hero_btn1_url', home_url( '/contact-us/' ) );
-$hero_btn2_text   = ci360_acf_val( 'hero_btn2_text', 'Explore Our Work' );
-$hero_btn2_url    = ci360_acf_val( 'hero_btn2_url', home_url( '/projects/' ) );
+$hero_btn1_text   = ci360_get_dynamic_hero_val( 'hero_btn1_text', 'Start a Conversation' );
+$hero_btn1_url    = ci360_get_dynamic_hero_val( 'hero_btn1_url', home_url( '/contact-us/' ) );
+$hero_btn2_text   = ci360_get_dynamic_hero_val( 'hero_btn2_text', 'Explore Our Work' );
+$hero_btn2_url    = ci360_get_dynamic_hero_val( 'hero_btn2_url', home_url( '/projects/' ) );
 
 // 3. Stats / Metrics
 $hero_stats = array();
-if ( function_exists( 'have_rows' ) && have_rows( 'hero_stats_repeater' ) ) {
-    while ( have_rows( 'hero_stats_repeater' ) ) {
-        the_row();
-        $hero_stats[] = array(
-            'value' => get_sub_field( 'stat_value' ),
-            'label' => get_sub_field( 'stat_label' ),
-            'color' => get_sub_field( 'stat_color' ) ?: 'text-cyan-400',
-        );
+if ( function_exists( 'have_rows' ) && ( have_rows( 'hero_stats_repeater' ) || have_rows( 'hero_stats_repeater', 'option' ) ) ) {
+    $rows = have_rows( 'hero_stats_repeater' ) ? 'hero_stats_repeater' : array( 'hero_stats_repeater', 'option' );
+    if ( is_array( $rows ) ) {
+        while ( have_rows( $rows[0], $rows[1] ) ) {
+            the_row();
+            $hero_stats[] = array(
+                'value' => get_sub_field( 'stat_value' ),
+                'label' => get_sub_field( 'stat_label' ),
+                'color' => get_sub_field( 'stat_color' ) ?: 'text-cyan-400',
+            );
+        }
+    } else {
+        while ( have_rows( $rows ) ) {
+            the_row();
+            $hero_stats[] = array(
+                'value' => get_sub_field( 'stat_value' ),
+                'label' => get_sub_field( 'stat_label' ),
+                'color' => get_sub_field( 'stat_color' ) ?: 'text-cyan-400',
+            );
+        }
     }
 }
 
@@ -59,20 +80,38 @@ if ( empty( $hero_stats ) ) {
 
 // 4. Showcase Slides
 $hero_slides = array();
-if ( function_exists( 'have_rows' ) && have_rows( 'hero_slides_repeater' ) ) {
-    while ( have_rows( 'hero_slides_repeater' ) ) {
-        the_row();
-        $img_field = get_sub_field( 'slide_image' );
-        $img_url   = is_array( $img_field ) ? $img_field['url'] : $img_field;
-        $video_val = get_sub_field( 'slide_video_url' );
+if ( function_exists( 'have_rows' ) && ( have_rows( 'hero_slides_repeater' ) || have_rows( 'hero_slides_repeater', 'option' ) ) ) {
+    $slide_source = have_rows( 'hero_slides_repeater' ) ? 'hero_slides_repeater' : array( 'hero_slides_repeater', 'option' );
+    if ( is_array( $slide_source ) ) {
+        while ( have_rows( $slide_source[0], $slide_source[1] ) ) {
+            the_row();
+            $img_field = get_sub_field( 'slide_image' );
+            $img_url   = is_array( $img_field ) ? $img_field['url'] : $img_field;
+            $video_val = get_sub_field( 'slide_video_url' );
 
-        $hero_slides[] = array(
-            'image'    => $img_url,
-            'videoUrl' => $video_val,
-            'title'    => get_sub_field( 'slide_title' ),
-            'tag'      => get_sub_field( 'slide_tag' ),
-            'desc'     => get_sub_field( 'slide_description' ),
-        );
+            $hero_slides[] = array(
+                'image'    => $img_url,
+                'videoUrl' => $video_val,
+                'title'    => get_sub_field( 'slide_title' ),
+                'tag'      => get_sub_field( 'slide_tag' ),
+                'desc'     => get_sub_field( 'slide_description' ),
+            );
+        }
+    } else {
+        while ( have_rows( $slide_source ) ) {
+            the_row();
+            $img_field = get_sub_field( 'slide_image' );
+            $img_url   = is_array( $img_field ) ? $img_field['url'] : $img_field;
+            $video_val = get_sub_field( 'slide_video_url' );
+
+            $hero_slides[] = array(
+                'image'    => $img_url,
+                'videoUrl' => $video_val,
+                'title'    => get_sub_field( 'slide_title' ),
+                'tag'      => get_sub_field( 'slide_tag' ),
+                'desc'     => get_sub_field( 'slide_description' ),
+            );
+        }
     }
 }
 

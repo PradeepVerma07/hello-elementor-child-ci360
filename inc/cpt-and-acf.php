@@ -1,7 +1,6 @@
 <?php
 /**
- * ACF Field Groups Registration
- * Automatically registers ACF fields in WordPress admin for Front Page / Home Template.
+ * Custom Post Types (CPT), Taxonomies & ACF Fields Setup
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -10,16 +9,105 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-add_action( 'acf/init', 'ci360_acf_register_hero_fields' );
+// =========================================================================
+// 1. REGISTER CUSTOM POST TYPES & TAXONOMIES
+// =========================================================================
+add_action( 'init', 'ci360_register_custom_post_types_and_taxonomies' );
 
-function ci360_acf_register_hero_fields() {
+function ci360_register_custom_post_types_and_taxonomies() {
+    // 1.1 Case Studies / Projects CPT
+    $case_study_labels = array(
+        'name'               => _x( 'Case Studies', 'post type general name', 'hello-elementor-child-ci360-acf' ),
+        'singular_name'      => _x( 'Case Study', 'post type singular name', 'hello-elementor-child-ci360-acf' ),
+        'menu_name'          => _x( 'Case Studies', 'admin menu', 'hello-elementor-child-ci360-acf' ),
+        'name_admin_bar'     => _x( 'Case Study', 'add new on admin bar', 'hello-elementor-child-ci360-acf' ),
+        'add_new'            => _x( 'Add New Case Study', 'case study', 'hello-elementor-child-ci360-acf' ),
+        'add_new_item'       => __( 'Add New Case Study', 'hello-elementor-child-ci360-acf' ),
+        'new_item'           => __( 'New Case Study', 'hello-elementor-child-ci360-acf' ),
+        'edit_item'          => __( 'Edit Case Study', 'hello-elementor-child-ci360-acf' ),
+        'view_item'          => __( 'View Case Study', 'hello-elementor-child-ci360-acf' ),
+        'all_items'          => __( 'All Case Studies', 'hello-elementor-child-ci360-acf' ),
+        'search_items'       => __( 'Search Case Studies', 'hello-elementor-child-ci360-acf' ),
+        'not_found'          => __( 'No case studies found.', 'hello-elementor-child-ci360-acf' ),
+        'not_found_in_trash' => __( 'No case studies found in Trash.', 'hello-elementor-child-ci360-acf' ),
+    );
+
+    register_post_type( 'case_study', array(
+        'labels'             => $case_study_labels,
+        'public'             => true,
+        'publicly_queryable' => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'query_var'          => true,
+        'rewrite'            => array( 'slug' => 'case-studies', 'with_front' => false ),
+        'capability_type'    => 'post',
+        'has_archive'        => 'case-studies',
+        'hierarchical'       => false,
+        'menu_position'      => 5,
+        'menu_icon'          => 'dashicons-portfolio',
+        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions' ),
+        'show_in_rest'       => true,
+    ) );
+
+    // 1.2 Case Study Categories / Sectors Taxonomy
+    $cat_labels = array(
+        'name'              => _x( 'Sectors / Categories', 'taxonomy general name', 'hello-elementor-child-ci360-acf' ),
+        'singular_name'     => _x( 'Sector / Category', 'taxonomy singular name', 'hello-elementor-child-ci360-acf' ),
+        'search_items'      => __( 'Search Sectors', 'hello-elementor-child-ci360-acf' ),
+        'all_items'         => __( 'All Sectors', 'hello-elementor-child-ci360-acf' ),
+        'edit_item'         => __( 'Edit Sector', 'hello-elementor-child-ci360-acf' ),
+        'update_item'       => __( 'Update Sector', 'hello-elementor-child-ci360-acf' ),
+        'add_new_item'      => __( 'Add New Sector', 'hello-elementor-child-ci360-acf' ),
+        'new_item_name'     => __( 'New Sector Name', 'hello-elementor-child-ci360-acf' ),
+        'menu_name'         => __( 'Sectors & Domains', 'hello-elementor-child-ci360-acf' ),
+    );
+
+    register_taxonomy( 'case_study_category', array( 'case_study' ), array(
+        'hierarchical'      => true,
+        'labels'            => $cat_labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'case-study-sector' ),
+        'show_in_rest'      => true,
+    ) );
+}
+
+// =========================================================================
+// 2. REGISTER ACF OPTIONS PAGE ("CI360 Hero Settings")
+// =========================================================================
+add_action( 'acf/init', 'ci360_register_acf_options_page' );
+
+function ci360_register_acf_options_page() {
+    if ( function_exists( 'acf_add_options_page' ) ) {
+        acf_add_options_page( array(
+            'page_title' => 'CI360 Hero Section Settings',
+            'menu_title' => 'Hero Settings',
+            'menu_slug'  => 'ci360-hero-settings',
+            'capability' => 'edit_posts',
+            'icon_url'   => 'dashicons-superhero-alt',
+            'position'   => 4,
+            'redirect'   => false,
+        ) );
+    }
+}
+
+// =========================================================================
+// 3. REGISTER ACF FIELD GROUPS
+// =========================================================================
+add_action( 'acf/init', 'ci360_acf_register_all_local_fields' );
+
+function ci360_acf_register_all_local_fields() {
     if ( ! function_exists( 'acf_add_local_field_group' ) ) {
         return;
     }
 
+    // ---------------------------------------------------------------------
+    // Field Group 1: Hero Section Settings (Options Page + Front Page)
+    // ---------------------------------------------------------------------
     acf_add_local_field_group( array(
         'key' => 'group_ci360_hero_settings',
-        'title' => 'Home Page: Hero Section Settings (CI360)',
+        'title' => 'CI360: Dynamic Home Hero Section Settings',
         'fields' => array(
             // Tab 1: Headlines & Text
             array(
@@ -33,7 +121,6 @@ function ci360_acf_register_hero_fields() {
                 'name' => 'hero_badge_text',
                 'type' => 'text',
                 'default_value' => 'One Integrated Partner. Every Marketing Possibility.',
-                'instructions' => 'Top pill badge text shown above the headline.',
             ),
             array(
                 'key' => 'field_hero_title_prefix',
@@ -200,6 +287,13 @@ function ci360_acf_register_hero_fields() {
         'location' => array(
             array(
                 array(
+                    'param' => 'options_page',
+                    'operator' => '==',
+                    'value' => 'ci360-hero-settings',
+                ),
+            ),
+            array(
+                array(
                     'param' => 'page_type',
                     'operator' => '==',
                     'value' => 'front_page',
@@ -210,6 +304,60 @@ function ci360_acf_register_hero_fields() {
                     'param' => 'page_template',
                     'operator' => '==',
                     'value' => 'template-home-acf.php',
+                ),
+            ),
+        ),
+    ) );
+
+    // ---------------------------------------------------------------------
+    // Field Group 2: Case Study Single Project Details (CPT: case_study)
+    // ---------------------------------------------------------------------
+    acf_add_local_field_group( array(
+        'key' => 'group_ci360_case_study_details',
+        'title' => 'Case Study Project Metadata & Metrics',
+        'fields' => array(
+            array(
+                'key' => 'field_cs_client_name',
+                'label' => 'Client Name',
+                'name' => 'client_name',
+                'type' => 'text',
+            ),
+            array(
+                'key' => 'field_cs_summary',
+                'label' => 'Card Short Summary',
+                'name' => 'card_summary',
+                'type' => 'textarea',
+                'rows' => 2,
+            ),
+            array(
+                'key' => 'field_cs_metrics',
+                'label' => 'Impact Metrics (3 Items)',
+                'name' => 'impact_metrics',
+                'type' => 'repeater',
+                'layout' => 'table',
+                'button_label' => 'Add Metric',
+                'sub_fields' => array(
+                    array(
+                        'key' => 'field_cs_metric_val',
+                        'label' => 'Value (e.g. ₹180Cr+, +210%)',
+                        'name' => 'metric_value',
+                        'type' => 'text',
+                    ),
+                    array(
+                        'key' => 'field_cs_metric_lbl',
+                        'label' => 'Label (e.g. Pipeline Influenced)',
+                        'name' => 'metric_label',
+                        'type' => 'text',
+                    ),
+                ),
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'case_study',
                 ),
             ),
         ),
