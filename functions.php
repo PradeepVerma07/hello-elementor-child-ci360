@@ -28,3 +28,12 @@ function ci360_acf_render_hero_shortcode( $atts ) {
     get_template_part( 'template-parts/home-hero-acf' );
     return ob_get_clean();
 }
+
+// 4. Register [ci360_featured_projects] Shortcode for Elementor
+add_shortcode( 'ci360_featured_projects', 'ci360_acf_render_featured_projects_shortcode' );
+
+function ci360_acf_render_featured_projects_shortcode( $atts ) {
+    ob_start();
+    get_template_part( 'template-parts/featured-projects-acf' );
+    return ob_get_clean();
+}

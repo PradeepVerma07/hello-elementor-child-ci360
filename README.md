@@ -52,7 +52,16 @@ hello-elementor-child-ci360-acf/
 - Click **Update**.
 
 ### 3. Using in Elementor
-Drag an Elementor **Shortcode** widget and enter:
-```
-[ci360_home_hero]
-```
+You can place the sections anywhere on your pages using Elementor's **Shortcode** widget:
+
+- **Dynamic Hero Section**:
+  ```text
+  [ci360_home_hero]
+  ```
+
+- **Dynamic Featured Projects Section**:
+  ```text
+  [ci360_featured_projects]
+  ```
+  *Automatically queries published `case_study` CPT posts and `case_study_category` terms, with graceful fallbacks.*
+
