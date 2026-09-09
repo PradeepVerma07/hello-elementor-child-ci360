@@ -55,3 +55,15 @@ function ci360_acf_render_blog_grid_shortcode( $atts ) {
     get_template_part( 'template-parts/blog-grid-acf' );
     return ob_get_clean();
 }
+
+// 7. Register [ci360_founder_leadership] & [ci360_founder_section_two] Shortcodes
+add_shortcode( 'ci360_founder_leadership', 'ci360_acf_render_founder_leadership_shortcode' );
+add_shortcode( 'ci360_founder_section_two', 'ci360_acf_render_founder_leadership_shortcode' );
+
+if ( ! function_exists( 'ci360_acf_render_founder_leadership_shortcode' ) ) {
+    function ci360_acf_render_founder_leadership_shortcode( $atts ) {
+        ob_start();
+        get_template_part( 'template-parts/founder-leadership-acf' );
+        return ob_get_clean();
+    }
+}

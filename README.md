@@ -70,5 +70,11 @@ You can place the sections anywhere on your pages using Elementor's **Shortcode*
   ```text
   [ci360_blog_grid]
   ```
+
+- **Dynamic Founder Page Second Section (Leadership Profiles - No Logo)**:
+  ```text
+  [ci360_founder_section_two]
+  ```
+  *Presents full executive profiles for Pramit Ghosh & Aashit Shah with clean photography (no logo watermark), LinkedIn links, founder's notes, and strategic focus areas.*
   *Pulls real published WordPress posts with category filtering, reading time estimates, pagination, and meta box include/exclude category controls.*
 

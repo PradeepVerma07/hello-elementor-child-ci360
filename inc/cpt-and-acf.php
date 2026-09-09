@@ -739,6 +739,202 @@ if ( ! function_exists( 'ci360_acf_register_all_local_fields' ) ) {
             'wrapper' => array( 'width' => '50' ),
         );
 
+        
+        // Tab 8: Founder Page (Leadership Profiles)
+        $hero_fields[] = array(
+            'key' => 'field_tab_founder_settings',
+            'label' => 'Founder Page (Leadership Profiles)',
+            'type' => 'tab',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_msg',
+            'label' => '👤 Founder 1: Pramit Ghosh (CEO)',
+            'type' => 'message',
+            'message' => 'Configure Profile for Pramit Ghosh.',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_name',
+            'label' => 'Founder 1 Name',
+            'name' => 'f1_name',
+            'type' => 'text',
+            'default_value' => 'Pramit Ghosh',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_role',
+            'label' => 'Founder 1 Role / Title',
+            'name' => 'f1_role',
+            'type' => 'text',
+            'default_value' => 'Founder & Chief Executive Officer',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_location',
+            'label' => 'Founder 1 Location Tag',
+            'name' => 'f1_location',
+            'type' => 'text',
+            'default_value' => 'Ahmedabad HQ & Global Strategy',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_image_url',
+            'label' => 'Founder 1 Photo Link (URL - No Logo)',
+            'name' => 'f1_image_url',
+            'type' => 'url',
+            'default_value' => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images/team/pramit-ghosh.webp',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_linkedin_url',
+            'label' => 'Founder 1 LinkedIn URL',
+            'name' => 'f1_linkedin_url',
+            'type' => 'url',
+            'default_value' => 'https://www.linkedin.com/in/pramitghosh/',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_bio',
+            'label' => 'Founder 1 Bio Paragraph',
+            'name' => 'f1_bio',
+            'type' => 'textarea',
+            'rows' => 3,
+            'default_value' => 'Pramit is a seasoned brand architect and communication strategist with over two decades of experience helping enterprises build enduring market authority. Prior to founding CI360, he spearheaded national and international campaigns across telecom, healthcare, and infrastructure.',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_quote',
+            'label' => 'Founder 1 Note / Quote',
+            'name' => 'f1_quote',
+            'type' => 'textarea',
+            'rows' => 3,
+            'default_value' => 'We founded CI360 on a simple, uncompromising premise: marketing shouldn\'t be an expensive collection of fragmented agency silos. When strategy, cinema, and digital engineering work as one unified organism, brands don\'t just get noticed—they dominate their category and create lasting commercial value.',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_focus1',
+            'label' => 'Founder 1 Focus 1',
+            'name' => 'f1_focus1',
+            'type' => 'text',
+            'default_value' => 'Diagnostic Commercial Strategy',
+            'wrapper' => array( 'width' => '25' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_focus2',
+            'label' => 'Founder 1 Focus 2',
+            'name' => 'f1_focus2',
+            'type' => 'text',
+            'default_value' => 'Brand Narrative Architecture',
+            'wrapper' => array( 'width' => '25' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_focus3',
+            'label' => 'Founder 1 Focus 3',
+            'name' => 'f1_focus3',
+            'type' => 'text',
+            'default_value' => 'Enterprise Growth Modeling',
+            'wrapper' => array( 'width' => '25' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f1_focus4',
+            'label' => 'Founder 1 Focus 4',
+            'name' => 'f1_focus4',
+            'type' => 'text',
+            'default_value' => 'Keynote & Executive Positioning',
+            'wrapper' => array( 'width' => '25' ),
+        );
+
+        // Founder 2: Aashit Shah
+        $hero_fields[] = array(
+            'key' => 'field_f2_msg',
+            'label' => '👤 Founder 2: Aashit Shah (Director)',
+            'type' => 'message',
+            'message' => 'Configure Profile for Aashit Shah.',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_name',
+            'label' => 'Founder 2 Name',
+            'name' => 'f2_name',
+            'type' => 'text',
+            'default_value' => 'Aashit Shah',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_role',
+            'label' => 'Founder 2 Role / Title',
+            'name' => 'f2_role',
+            'type' => 'text',
+            'default_value' => 'Co-Founder & Director',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_location',
+            'label' => 'Founder 2 Location Tag',
+            'name' => 'f2_location',
+            'type' => 'text',
+            'default_value' => 'Corporate Governance & Global Alliances',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_image_url',
+            'label' => 'Founder 2 Photo Link (URL - No Logo)',
+            'name' => 'f2_image_url',
+            'type' => 'url',
+            'default_value' => 'https://lightcyan-dinosaur-747226.hostingersite.com/wp-content/themes/hello-elementor-child-ci360/assets/images/team/aashit-shah.jpg',
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_linkedin_url',
+            'label' => 'Founder 2 LinkedIn URL',
+            'name' => 'f2_linkedin_url',
+            'type' => 'url',
+            'default_value' => 'https://www.linkedin.com/company/ci360degrees/',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_bio',
+            'label' => 'Founder 2 Bio Paragraph',
+            'name' => 'f2_bio',
+            'type' => 'textarea',
+            'rows' => 3,
+            'default_value' => 'Aashit brings extensive executive leadership in corporate advisory, global client expansion, and multi-market business operations. He oversees strategic alliances, high-touch enterprise client relationships, and transatlantic operational delivery across India and the United States.',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_quote',
+            'label' => 'Founder 2 Note / Quote',
+            'name' => 'f2_quote',
+            'type' => 'textarea',
+            'rows' => 3,
+            'default_value' => 'Our commitment to clients is transparency and accountability. We eliminate the \'mediocrity tax\' of traditional retainers by ensuring every rupee invested in CI360 connects directly to visibility, qualified pipeline, and measurable enterprise valuation.',
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_focus1',
+            'label' => 'Founder 2 Focus 1',
+            'name' => 'f2_focus1',
+            'type' => 'text',
+            'default_value' => 'Transatlantic Client Alliances',
+            'wrapper' => array( 'width' => '25' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_focus2',
+            'label' => 'Founder 2 Focus 2',
+            'name' => 'f2_focus2',
+            'type' => 'text',
+            'default_value' => 'Global Operational Agility',
+            'wrapper' => array( 'width' => '25' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_focus3',
+            'label' => 'Founder 2 Focus 3',
+            'name' => 'f2_focus3',
+            'type' => 'text',
+            'default_value' => 'Institutional Relationship Governance',
+            'wrapper' => array( 'width' => '25' ),
+        );
+        $hero_fields[] = array(
+            'key' => 'field_f2_focus4',
+            'label' => 'Founder 2 Focus 4',
+            'name' => 'f2_focus4',
+            'type' => 'text',
+            'default_value' => 'Commercial Deal Structuring',
+            'wrapper' => array( 'width' => '25' ),
+        );
+
         acf_add_local_field_group( array(
             'key' => 'group_ci360_hero_settings',
             'title' => 'CI360: Theme & Homepage Section Settings',
