@@ -1,7 +1,7 @@
 <?php
 /**
- * Custom Post Types (CPT), Taxonomies, ACF Field Groups & Meta Boxes
- * Robust and compatible with PHP 7.4 through PHP 8.3+
+ * ACF Field Groups, Theme Settings & Meta Boxes
+ * Pure ACF-driven setup for Hero, Featured Projects, Pillars, and Blog.
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -11,70 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // =========================================================================
-// 1. REGISTER CUSTOM POST TYPES & TAXONOMIES
-// =========================================================================
-if ( ! function_exists( 'ci360_register_custom_post_types_and_taxonomies' ) ) {
-    function ci360_register_custom_post_types_and_taxonomies() {
-        $case_study_labels = array(
-            'name'               => _x( 'Case Studies', 'post type general name', 'hello-elementor-child-ci360-acf' ),
-            'singular_name'      => _x( 'Case Study', 'post type singular name', 'hello-elementor-child-ci360-acf' ),
-            'menu_name'          => _x( 'Case Studies', 'admin menu', 'hello-elementor-child-ci360-acf' ),
-            'name_admin_bar'     => _x( 'Case Study', 'add new on admin bar', 'hello-elementor-child-ci360-acf' ),
-            'add_new'            => _x( 'Add New Case Study', 'case study', 'hello-elementor-child-ci360-acf' ),
-            'add_new_item'       => __( 'Add New Case Study', 'hello-elementor-child-ci360-acf' ),
-            'new_item'           => __( 'New Case Study', 'hello-elementor-child-ci360-acf' ),
-            'edit_item'          => __( 'Edit Case Study', 'hello-elementor-child-ci360-acf' ),
-            'view_item'          => __( 'View Case Study', 'hello-elementor-child-ci360-acf' ),
-            'all_items'          => __( 'All Case Studies', 'hello-elementor-child-ci360-acf' ),
-            'search_items'       => __( 'Search Case Studies', 'hello-elementor-child-ci360-acf' ),
-            'not_found'          => __( 'No case studies found.', 'hello-elementor-child-ci360-acf' ),
-            'not_found_in_trash' => __( 'No case studies found in Trash.', 'hello-elementor-child-ci360-acf' ),
-        );
-
-        register_post_type( 'case_study', array(
-            'labels'             => $case_study_labels,
-            'public'             => true,
-            'publicly_queryable' => true,
-            'show_ui'            => true,
-            'show_in_menu'       => true,
-            'query_var'          => true,
-            'rewrite'            => array( 'slug' => 'case-studies', 'with_front' => false ),
-            'capability_type'    => 'post',
-            'has_archive'        => 'case-studies',
-            'hierarchical'       => false,
-            'menu_position'      => 5,
-            'menu_icon'          => 'dashicons-portfolio',
-            'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'page-attributes' ),
-            'show_in_rest'       => true,
-        ) );
-
-        $cat_labels = array(
-            'name'              => _x( 'Sectors / Categories', 'taxonomy general name', 'hello-elementor-child-ci360-acf' ),
-            'singular_name'     => _x( 'Sector / Category', 'taxonomy singular name', 'hello-elementor-child-ci360-acf' ),
-            'search_items'      => __( 'Search Sectors', 'hello-elementor-child-ci360-acf' ),
-            'all_items'         => __( 'All Sectors', 'hello-elementor-child-ci360-acf' ),
-            'edit_item'         => __( 'Edit Sector', 'hello-elementor-child-ci360-acf' ),
-            'update_item'       => __( 'Update Sector', 'hello-elementor-child-ci360-acf' ),
-            'add_new_item'      => __( 'Add New Sector', 'hello-elementor-child-ci360-acf' ),
-            'new_item_name'     => __( 'New Sector Name', 'hello-elementor-child-ci360-acf' ),
-            'menu_name'         => __( 'Sectors & Domains', 'hello-elementor-child-ci360-acf' ),
-        );
-
-        register_taxonomy( 'case_study_category', array( 'case_study' ), array(
-            'hierarchical'      => true,
-            'labels'            => $cat_labels,
-            'show_ui'           => true,
-            'show_admin_column' => true,
-            'query_var'         => true,
-            'rewrite'            => array( 'slug' => 'case-study-sector' ),
-            'show_in_rest'      => true,
-        ) );
-    }
-}
-add_action( 'init', 'ci360_register_custom_post_types_and_taxonomies' );
-
-// =========================================================================
-// 2. REGISTER ACF OPTIONS PAGE
+// 1. REGISTER ACF OPTIONS PAGE ("CI360 Settings")
 // =========================================================================
 if ( ! function_exists( 'ci360_register_acf_options_page' ) ) {
     function ci360_register_acf_options_page() {
@@ -94,7 +31,7 @@ if ( ! function_exists( 'ci360_register_acf_options_page' ) ) {
 add_action( 'acf/init', 'ci360_register_acf_options_page' );
 
 // =========================================================================
-// 3. REGISTER ACF FIELD GROUPS
+// 2. REGISTER ACF FIELD GROUPS
 // =========================================================================
 if ( ! function_exists( 'ci360_acf_register_all_local_fields' ) ) {
     function ci360_acf_register_all_local_fields() {
@@ -692,8 +629,6 @@ if ( ! function_exists( 'ci360_acf_register_all_local_fields' ) ) {
             'default_value' => 'Our work is anchored in deep integrity, relentless craft perfection, radical empathy for user experiences, and enduring long-term client partnership stewardship.',
         );
 
-        // Tab 7: Blog & Insights Page Settings
-        
         // Tab 7: Blog Hero & Insights Page Settings
         $hero_fields[] = array(
             'key' => 'field_tab_blog_settings',
@@ -839,141 +774,13 @@ if ( ! function_exists( 'ci360_acf_register_all_local_fields' ) ) {
                 ),
             ),
         ) );
-
-        // 3.2 Case Study CPT Metabox
-        acf_add_local_field_group( array(
-            'key' => 'group_ci360_case_study_metabox',
-            'title' => 'Case Study Showcase & Meta Settings',
-            'fields' => array(
-                array(
-                    'key' => 'field_cs_is_featured',
-                    'label' => '⭐ Feature as Primary Big Card',
-                    'name' => 'is_featured_project',
-                    'type' => 'true_false',
-                    'ui' => 1,
-                    'default_value' => 0,
-                ),
-                array(
-                    'key' => 'field_cs_image_url',
-                    'label' => 'Project Image Link (URL)',
-                    'name' => 'project_image_url',
-                    'type' => 'url',
-                ),
-                array(
-                    'key' => 'field_cs_video_url',
-                    'label' => 'Direct Video Link (Optional MP4)',
-                    'name' => 'project_video_url',
-                    'type' => 'url',
-                ),
-                array(
-                    'key' => 'field_cs_client_name',
-                    'label' => 'Client / Brand Name',
-                    'name' => 'client_name',
-                    'type' => 'text',
-                    'wrapper' => array( 'width' => '50' ),
-                ),
-                array(
-                    'key' => 'field_cs_card_tagline',
-                    'label' => 'Project Subtitle / Tagline',
-                    'name' => 'card_tagline',
-                    'type' => 'text',
-                    'wrapper' => array( 'width' => '50' ),
-                ),
-                array(
-                    'key' => 'field_cs_card_summary',
-                    'label' => 'Card Summary (Homepage Excerpt)',
-                    'name' => 'card_summary',
-                    'type' => 'textarea',
-                    'rows' => 3,
-                ),
-                array(
-                    'key' => 'field_cs_custom_url',
-                    'label' => 'Custom Target URL (Optional)',
-                    'name' => 'custom_case_study_url',
-                    'type' => 'url',
-                ),
-            ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'post_type',
-                        'operator' => '==',
-                        'value' => 'case_study',
-                    ),
-                ),
-            ),
-        ) );
     }
 }
 add_action( 'acf/init', 'ci360_acf_register_all_local_fields' );
 
 // =========================================================================
-// 4. NATIVE WORDPRESS METABOXES (Safe Fallbacks)
+// 3. NATIVE WORDPRESS METABOX FOR BLOG PAGE (Include/Exclude Categories)
 // =========================================================================
-if ( ! function_exists( 'ci360_register_native_case_study_metabox' ) ) {
-    function ci360_register_native_case_study_metabox() {
-        add_meta_box(
-            'ci360_case_study_meta_box',
-            __( 'CI360 Case Study Showcase Details', 'hello-elementor-child-ci360-acf' ),
-            'ci360_render_native_case_study_metabox',
-            'case_study',
-            'normal',
-            'high'
-        );
-    }
-}
-add_action( 'add_meta_boxes', 'ci360_register_native_case_study_metabox' );
-
-if ( ! function_exists( 'ci360_render_native_case_study_metabox' ) ) {
-    function ci360_render_native_case_study_metabox( $post ) {
-        if ( ! $post ) return;
-        wp_nonce_field( 'ci360_case_study_nonce_action', 'ci360_case_study_nonce' );
-
-        $image_url      = get_post_meta( $post->ID, 'project_image_url', true );
-        $video_url      = get_post_meta( $post->ID, 'project_video_url', true );
-        $client_name    = get_post_meta( $post->ID, 'client_name', true );
-        $card_tagline   = get_post_meta( $post->ID, 'card_tagline', true );
-        $card_summary   = get_post_meta( $post->ID, 'card_summary', true );
-        $custom_url     = get_post_meta( $post->ID, 'custom_case_study_url', true );
-        $is_featured    = get_post_meta( $post->ID, 'is_featured_project', true );
-        ?>
-        <div style="padding: 10px 0;">
-            <p><label><input type="checkbox" name="is_featured_project" value="1" <?php checked( $is_featured, '1' ); ?>> <strong>⭐ Feature as Primary Big Card on Homepage</strong></label></p>
-            <p><label><strong>Project Image Link:</strong><br><input type="url" name="project_image_url" value="<?php echo esc_url( $image_url ); ?>" style="width:100%; max-width:600px;"></label></p>
-            <p><label><strong>Video Link (MP4 URL):</strong><br><input type="url" name="project_video_url" value="<?php echo esc_url( $video_url ); ?>" style="width:100%; max-width:600px;"></label></p>
-            <p><label><strong>Client Name:</strong><br><input type="text" name="client_name" value="<?php echo esc_attr( $client_name ); ?>" style="width:100%; max-width:600px;"></label></p>
-            <p><label><strong>Card Summary:</strong><br><textarea name="card_summary" rows="3" style="width:100%; max-width:600px;"><?php echo esc_textarea( $card_summary ); ?></textarea></label></p>
-            <p><label><strong>Custom Link URL:</strong><br><input type="url" name="custom_case_study_url" value="<?php echo esc_url( $custom_url ); ?>" style="width:100%; max-width:600px;"></label></p>
-        </div>
-        <?php
-    }
-}
-
-if ( ! function_exists( 'ci360_save_native_case_study_metabox' ) ) {
-    function ci360_save_native_case_study_metabox( $post_id ) {
-        if ( ! isset( $_POST['ci360_case_study_nonce'] ) || ! wp_verify_nonce( $_POST['ci360_case_study_nonce'], 'ci360_case_study_nonce_action' ) ) {
-            return;
-        }
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-            return;
-        }
-        if ( ! current_user_can( 'edit_post', $post_id ) ) {
-            return;
-        }
-
-        $fields = array( 'project_image_url', 'project_video_url', 'client_name', 'card_tagline', 'card_summary', 'custom_case_study_url' );
-        foreach ( $fields as $field ) {
-            if ( isset( $_POST[$field] ) ) {
-                update_post_meta( $post_id, $field, sanitize_text_field( $_POST[$field] ) );
-            }
-        }
-        $is_featured = isset( $_POST['is_featured_project'] ) ? '1' : '0';
-        update_post_meta( $post_id, 'is_featured_project', $is_featured );
-    }
-}
-add_action( 'save_post_case_study', 'ci360_save_native_case_study_metabox' );
-
-// 4.2 Native Page Metabox for Blog Include/Exclude
 if ( ! function_exists( 'ci360_register_blog_page_metabox' ) ) {
     function ci360_register_blog_page_metabox() {
         add_meta_box(
@@ -996,14 +803,12 @@ if ( ! function_exists( 'ci360_render_blog_page_metabox' ) ) {
         $inc_cats    = get_post_meta( $post->ID, 'blog_include_categories', true );
         $exc_cats    = get_post_meta( $post->ID, 'blog_exclude_categories', true );
         $posts_pp    = get_post_meta( $post->ID, 'blog_posts_per_page', true ) ?: 9;
-        $show_feat   = get_post_meta( $post->ID, 'blog_show_featured', true ) ?: '1';
         ?>
         <div style="padding:10px 0;">
             <p style="color:#64748b; font-size:13px;">Manage real blog categories and query settings for this page.</p>
             <p><label><strong>Include Specific Categories (Slugs or IDs):</strong><br><input type="text" name="blog_include_categories" value="<?php echo esc_attr( $inc_cats ); ?>" placeholder="e.g. strategy, technology, design" style="width:100%; max-width:600px;"></label><br><small style="color:#64748b;">Leave blank to include all categories.</small></p>
             <p><label><strong>Exclude Specific Categories (Slugs or IDs):</strong><br><input type="text" name="blog_exclude_categories" value="<?php echo esc_attr( $exc_cats ); ?>" placeholder="e.g. uncategorized, archive" style="width:100%; max-width:600px;"></label></p>
             <p><label><strong>Articles Per Page:</strong> <input type="number" name="blog_posts_per_page" value="<?php echo esc_attr( $posts_pp ); ?>" style="width:80px;"></label></p>
-            <p><label><input type="checkbox" name="blog_show_featured" value="1" <?php checked( $show_feat, '1' ); ?>> Display Top Featured Article</label></p>
         </div>
         <?php
     }
@@ -1027,8 +832,6 @@ if ( ! function_exists( 'ci360_save_blog_page_metabox' ) ) {
                 update_post_meta( $post_id, $field, sanitize_text_field( $_POST[$field] ) );
             }
         }
-        $show_feat = isset( $_POST['blog_show_featured'] ) ? '1' : '0';
-        update_post_meta( $post_id, 'blog_show_featured', $show_feat );
     }
 }
 add_action( 'save_post_page', 'ci360_save_blog_page_metabox' );

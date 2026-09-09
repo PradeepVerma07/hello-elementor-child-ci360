@@ -1,7 +1,6 @@
 <?php
 /**
- * Dynamic ACF Featured Projects / Case Studies Section
- * Complete with Bottom Insights Callout Banner & Custom Meta Controls.
+ * Dynamic ACF Featured Projects Section (100% ACF Controlled)
  *
  * @package HelloElementorChildCI360ACF
  */
@@ -68,69 +67,6 @@ $card4_cat   = ci360_get_fp_val( 'fp_card4_cat', 'Satcom • Client: Station Sat
 $card4_title = ci360_get_fp_val( 'fp_card4_title', 'Station Satcom: B2B Satellite Telecom Modernization' );
 $card4_desc  = ci360_get_fp_val( 'fp_card4_desc', 'Global brand repositioning and Next.js portal for maritime, defense, and enterprise satellite connectivity.' );
 $card4_url   = ci360_get_fp_val( 'fp_card4_url', home_url( '/case-studies/station-satcom/' ) );
-
-// 7. Check if CPT posts exist to optionally populate cards
-$cs_query = new WP_Query( array(
-    'post_type'      => 'case_study',
-    'posts_per_page' => 4,
-    'post_status'    => 'publish',
-    'orderby'        => 'meta_value_num menu_order date',
-    'order'          => 'DESC',
-) );
-
-if ( $cs_query->have_posts() && $cs_query->found_posts >= 4 ) {
-    $cpt_index = 0;
-    while ( $cs_query->have_posts() ) {
-        $cs_query->the_post();
-        $pid = get_the_ID();
-        
-        $p_img = get_post_meta( $pid, 'project_image_url', true );
-        if ( empty( $p_img ) ) {
-            $p_img = get_the_post_thumbnail_url( $pid, 'large' );
-        }
-        $p_vid = get_post_meta( $pid, 'project_video_url', true );
-
-        $terms = get_the_terms( $pid, 'case_study_category' );
-        $t_name = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->name : 'Featured';
-        $c_name = get_post_meta( $pid, 'client_name', true );
-        $cat_lbl = $c_name ? ( $t_name . ' • Client: ' . $c_name ) : $t_name;
-
-        $p_summary = get_post_meta( $pid, 'card_summary', true );
-        if ( empty( $p_summary ) ) {
-            $p_summary = wp_trim_words( get_the_excerpt() ?: get_the_content(), 18, '...' );
-        }
-        $p_url = get_post_meta( $pid, 'custom_case_study_url', true ) ?: get_permalink();
-
-        if ( $cpt_index === 0 ) {
-            if ( ! empty( $p_img ) ) $card1_img = $p_img;
-            if ( ! empty( $p_vid ) ) $card1_video = $p_vid;
-            $card1_cat   = $cat_lbl;
-            $card1_title = get_the_title();
-            $card1_desc  = $p_summary;
-            $card1_url   = $p_url;
-        } elseif ( $cpt_index === 1 ) {
-            if ( ! empty( $p_img ) ) $card2_img = $p_img;
-            $card2_cat   = $cat_lbl;
-            $card2_title = get_the_title();
-            $card2_desc  = $p_summary;
-            $card2_url   = $p_url;
-        } elseif ( $cpt_index === 2 ) {
-            if ( ! empty( $p_img ) ) $card3_img = $p_img;
-            $card3_cat   = $cat_lbl;
-            $card3_title = get_the_title();
-            $card3_desc  = $p_summary;
-            $card3_url   = $p_url;
-        } elseif ( $cpt_index === 3 ) {
-            if ( ! empty( $p_img ) ) $card4_img = $p_img;
-            $card4_cat   = $cat_lbl;
-            $card4_title = get_the_title();
-            $card4_desc  = $p_summary;
-            $card4_url   = $p_url;
-        }
-        $cpt_index++;
-    }
-    wp_reset_postdata();
-}
 
 $all_slides = array(
     array( 'badge' => $card1_badge, 'cat' => $card1_cat, 'title' => $card1_title, 'image' => $card1_img, 'url' => $card1_url ),

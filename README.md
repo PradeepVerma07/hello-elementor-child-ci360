@@ -6,12 +6,7 @@ A lightweight, high-performance **Hello Elementor Child Theme** for **CI360 Degr
 
 ## 🚀 What's Included
 
-### 1. Dedicated Custom Post Type (CPT) & Taxonomies
-- **Case Studies CPT** (`case_study`): Manage all projects & client case studies directly from the WordPress Admin sidebar.
-- **Sectors & Domains Taxonomy** (`case_study_category`): Categorize case studies into domains (e.g. *Reality, Satcom, Education, FMCG, Media*).
-- **REST API Enabled**: Fully compatible with `/wp-json/wp/v2/case-studies` for headless or dynamic front-end widgets.
-
-### 2. Dedicated ACF Options Page
+### 1. Dedicated ACF Options Page
 - **Hero Settings** (`ci360-hero-settings`): A dedicated menu item in the WordPress Admin sidebar allowing you to update the Hero section without needing to open a page editor.
 
 ### 3. Dynamic ACF Hero Section
@@ -63,7 +58,7 @@ You can place the sections anywhere on your pages using Elementor's **Shortcode*
   ```text
   [ci360_featured_projects]
   ```
-  *Automatically queries published `case_study` CPT posts and `case_study_category` terms, with graceful fallbacks.*
+  *Managed directly via CI360 Settings with individual card image links, titles, tags, and bottom insights banner.*
 
 - **Dynamic Foundational Pillars Section (Vision, Mission, Values)**:
   ```text
