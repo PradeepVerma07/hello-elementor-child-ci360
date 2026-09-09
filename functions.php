@@ -51,8 +51,9 @@ function ci360_acf_render_foundational_pillars_shortcode( $atts ) {
     return ob_get_clean();
 }
 
-// 6. Register [ci360_blog_grid] Shortcode for Elementor
+// 6. Register [ci360_blog_grid] & [ci360_blog_archive] Shortcodes for Elementor
 add_shortcode( 'ci360_blog_grid', 'ci360_acf_render_blog_grid_shortcode' );
+add_shortcode( 'ci360_blog_archive', 'ci360_acf_render_blog_grid_shortcode' );
 
 function ci360_acf_render_blog_grid_shortcode( $atts ) {
     ob_start();
