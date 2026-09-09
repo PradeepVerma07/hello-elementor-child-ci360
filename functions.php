@@ -9,12 +9,16 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// 1. Enqueue Parent and Child Theme Styles
+// 1. Enqueue Parent, Google Fonts (Poppins), and Child Theme Styles
 add_action( 'wp_enqueue_scripts', 'ci360_acf_child_enqueue_styles', 20 );
 
 function ci360_acf_child_enqueue_styles() {
+    // Google Fonts: Poppins (300, 400, 500, 600, 700, 800, 900)
+    wp_enqueue_style( 'ci360-google-font-poppins', 'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap', array(), null );
+    
+    // Parent & Child Theme Styles
     wp_enqueue_style( 'hello-elementor-parent-style', get_template_directory_uri() . '/style.css' );
-    wp_enqueue_style( 'hello-elementor-child-ci360-acf', get_stylesheet_directory_uri() . '/style.css', array( 'hello-elementor-parent-style' ), '1.0.0' );
+    wp_enqueue_style( 'hello-elementor-child-ci360-acf', get_stylesheet_directory_uri() . '/style.css', array( 'ci360-google-font-poppins', 'hello-elementor-parent-style' ), '1.0.1' );
 }
 
 // 2. Include CPTs, Taxonomies, and ACF Field Groups

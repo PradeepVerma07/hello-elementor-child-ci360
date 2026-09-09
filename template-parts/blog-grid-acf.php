@@ -145,7 +145,7 @@ $current_page_url = ! empty( $_SERVER["REQUEST_URI"] ) ? strtok( $_SERVER["REQUE
 <!-- Google Fonts & Tailwind CDN -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
@@ -153,8 +153,8 @@ $current_page_url = ! empty( $_SERVER["REQUEST_URI"] ) ? strtok( $_SERVER["REQUE
     theme: {
       extend: {
         fontFamily: {
-          sans: ['Inter', 'sans-serif'],
-          montserrat: ['Montserrat', 'sans-serif'],
+          sans: ['Poppins', 'sans-serif'],
+          poppins: ['Poppins', 'sans-serif'],
         }
       }
     }
@@ -169,7 +169,7 @@ $current_page_url = ! empty( $_SERVER["REQUEST_URI"] ) ? strtok( $_SERVER["REQUE
     position: relative;
     background-color: #020617;
     color: #ffffff;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     padding: 80px 24px 100px 24px;
     box-sizing: border-box;
     overflow: hidden;
